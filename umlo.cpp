@@ -93,9 +93,10 @@ void Umlo::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
                 ui->textEdit->append(f.fileName());
             }*/
 
-            ui->textEdit->append("Recuperation de la liste des RPMS ...");
+            ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur...");
 
             RpmName = "";
+            PrCase=0;
             future = QtConcurrent::run(this, &Umlo::scanDir, MountDir->path());
 
         }
@@ -126,18 +127,14 @@ void Umlo::on_BtnDeConect_released()
 
 }
 
-void *Umlo::scanDir(QDir dir)
+void Umlo::scanDir(QDir dir)
 {
-    QFileInfoList fil = dir.entryInfoList( QStringList( RpmName + "*" + PrefixUser + "*" ),
-                                           QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
-                                           QDir::Name | QDir::IgnoreCase );
+    QFileInfoList fil = dir.entryInfoList( QStringList( RpmName + "*" + PrefixUser + "*rpm" ), QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo fi, fil )
         //ui->textEdit->append(fi.fileName());
         emit computationProgress(fi);
 
-    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),
-                                           QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,
-                                           QDir::Name | QDir::IgnoreCase );
+    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo di, dil )
         scanDir( QDir( di.absoluteFilePath() ) );
 
@@ -178,6 +175,7 @@ void Umlo::on_BtnDel_released()
 
     RpmName = ui->CmbxRpmList->currentText();
     future = QtConcurrent::run(this, &Umlo::scanDir, MountDir->path());
+    ui->textEdit->append("Suppression des RPMS " + ui->CmbxRpmList->currentText() + " sur le serveur");
 
 }
 
@@ -190,9 +188,7 @@ void Umlo::on_CmbxRpmList_textActivated(const QString &arg1)
 
 void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
 {
-    QFileInfoList fil = dir.entryInfoList( QStringList( LocalRpm + "*" + PrefixUser + "*" ),
-                                           QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
-                                           QDir::Name | QDir::IgnoreCase );
+    QFileInfoList fil = dir.entryInfoList( QStringList( LocalRpm + "*" + PrefixUser + "*" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo fi, fil )
     {
         QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
@@ -203,9 +199,7 @@ void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
             ui->CmbxRpmVers->addItem(VersRel);
     }
 
-    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),
-                                           QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,
-                                           QDir::Name | QDir::IgnoreCase );
+    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo di, dil )
         FindLocalRpmVers( QDir( di.absoluteFilePath() ) , LocalRpm);
 }
@@ -213,9 +207,7 @@ void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
 
 void Umlo::FindLocalRpm(QDir dir)
 {
-    QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),
-                                           QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
-                                           QDir::Name | QDir::IgnoreCase );
+    QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo fi, fil )
     {
         QStringList RName = fi.fileName().split("-");
@@ -243,9 +235,7 @@ void Umlo::FindLocalRpm(QDir dir)
 
     }
 
-    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),
-                                           QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,
-                                           QDir::Name | QDir::IgnoreCase );
+    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo di, dil )
         FindLocalRpm( QDir( di.absoluteFilePath() ) );
 }

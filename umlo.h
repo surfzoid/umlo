@@ -53,7 +53,7 @@ private:
     QProcess *SftpProc;
     QDir *MountDir;
     QSettings settings;
-    void *scanDir(QDir dir);
+    void scanDir(QDir dir);
     QFuture <void> future;
     QString RpmName;
     int PrCase = 0;
