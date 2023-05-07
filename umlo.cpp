@@ -186,7 +186,7 @@ void Umlo::on_BtnDel_released()
 {
     PrCase=1;
 
-    int ret = QMessageBox::warning(this,tr("Confirmation "),tr("Cette action vas effacer tout les rpms et srpm de ") + ui->CmbxRpmList->currentText(),QMessageBox::Ok | QMessageBox::Cancel);
+    int ret = QMessageBox::warning(this,tr("Confirmation "),tr("Cette action vas effacer sur le serveur tous les rpms et srpm de ") + ui->CmbxRpmList->currentText(),QMessageBox::Ok | QMessageBox::Cancel);
     if (ret == QMessageBox::Cancel)
         return;
 
