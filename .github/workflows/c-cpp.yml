@@ -1,0 +1,137 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Need qmake and QT
+        run: | 
+            sudo apt install -y qt5-qmake qtbase5-dev qtbase5-dev-tools
+
+      - name: qmake
+        run: qmake
+        env:
+          PREFIX: /usr/share
+
+      - name: make
+        run: make
+
+      - name: make check
+        run: make check
+
+      - name: make install
+        run: sudo make install
+      
+      - name: Version
+        run: echo "::set-output name=version::$(head -n 1 ./umlo.pro| cut -d ' ' -f 3)"
+        id: version
+
+      - name: Archive of bin's
+        run: | 
+            tar -czvf umlo-bin-${{ steps.version.outputs.version }}.tar.gz /usr/bin/umlo
+            ls -lah
+
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1.11.1
+        id: create_release
+        with:
+          artifacts: "umlo-bin-${{ steps.version.outputs.version }}*"
+          replacesArtifacts: true
+          token: ${{ github.TOKEN }}
+          allowUpdates: true
+          name: ${{ steps.version.outputs.version }}
+          tag: ${{ steps.version.outputs.version }}
+          body: "Automatic build from GitHub action"
+
+  windoze:
+    # The type of runner that the job will run on
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    env:
+        CC: gcc
+        CXX: g++
+        Qt5_DIR: $GITHUB_WORKSPACE/qt/Qt/5.15.2/{arch}/bin
+        #QMAKESPEC: "%QTDIR%\/mkspecs\/win32-g++"
+    strategy:
+      fail-fast: false
+      matrix:
+        config: 
+        - {
+            name: "Windows Latest MinGW",
+            os: windows-2019,
+            #artifact: "windows_mingw.7z",
+            #build_type: "Release",
+            cc: "gcc",
+            cxx: "g++",
+            #archiver: "7z a",
+            #generators: "Ninja"
+          }
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Version
+        run: echo "::set-output name=version::$(head -n 1 ./umlo.pro| cut -d ' ' -f 3)"
+        id: version
+
+      - name: Check Version
+        run: echo ${{ steps.version.outputs.version }}
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3.0.0
+        with:
+          version: '5.15.2'
+          #host: 'windows'
+          #target: 'desktop'
+          dir: 'qt'
+          arch: 'win64_mingw81'
+          tools: 'tools_qtcreator,qt.tools.qtcreator'
+
+
+      - name: qmake
+        run: |
+            #setx QMAKESPEC="%QTDIR%\mkspecs\/win64-g++" /M
+            qmake -Wnone
+
+      - name: make & install
+        run: |
+            #remove double return
+            #sed -i ':a;N;$!ba;s/\n\n/\n/g' Makefile.Release
+            #sed -i ':a;N;$!ba;s/-Wextra -Wextra/-Wextra/g' Makefile.Release
+            #cat Makefile.Release
+            make
+            dir debug
+            dir release
+            mkdir application
+            cp release/umlo.exe application/
+            cp README.md application/
+            cp umlo_fr_FR.qm application/
+            cp LICENSE application/LICENSE.txt
+            qtenv2.bat
+            windeployqt application/umlo.exe --debug --compiler-runtime --libdir application/
+            cp qt/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll application/
+            cp qt/Qt/5.15.2/mingw81_64/bin/libstdc++-6.dll application/
+            cp qt/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll application/
+            Compress-Archive -Path application\* -DestinationPath umlo-win64-${{ steps.version.outputs.version }}.zip
+
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1.11.1
+        id: create_release
+        with:
+          artifacts: "umlo-win64-${{ steps.version.outputs.version }}.zip"
+          replacesArtifacts: true
+          token: ${{ github.TOKEN }}
+          allowUpdates: true
+          name: ${{ steps.version.outputs.version }}
+          tag: ${{ steps.version.outputs.version }}
+          body: "Automatic build from GitHub action, see umlo.spec for change log"
+

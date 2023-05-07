@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.0
+Name=umlo
+GenericName=umlo
+Comment=umlo
+Exec=umlo %U
+TryExec=/usr/bin/umlo
+Icon=umlo
+Terminal=true
+Type=Application
+Categories=Network;
+Keywords=MLO;
+X-Desktop-File-Install-Version=0.26
+Path=/usr/bin
+Comment[fr_FR]=Assistant de configuration pour umlo
+Name[fr_FR]=umlo wizard
+GenericName[fr_FR]=umlo wizard
