@@ -9,7 +9,7 @@ Release:        1.surf.mlo
 %endif
 
 License:        GPLv3
-Group:          Network/File Transfer
+Group:          Networking/File transfer
 URL:            https://github.com/surfzoid/umlo
 Source0:        https://github.com/surfzoid/umlo/archive/%{version}/umlo-%{version}.tar.gz
 # List of additional build dependencies
