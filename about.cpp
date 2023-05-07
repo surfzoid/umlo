@@ -6,6 +6,8 @@ About::About(QWidget *parent) :
     ui(new Ui::About)
 {
     ui->setupUi(this);
+    QString Vers = APP_VERSION;
+    ui->LblVers->setText("Version " + Vers);
 }
 
 About::~About()

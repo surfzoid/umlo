@@ -350,7 +350,6 @@
     <property name="title">
      <string>Fichier</string>
     </property>
-    <addaction name="actionPr_f_rences"/>
     <addaction name="actionRafraichir"/>
    </widget>
    <widget class="QMenu" name="menuAide">
@@ -363,6 +362,7 @@
     <property name="title">
      <string>Affichage</string>
     </property>
+    <addaction name="actionPr_f_rences"/>
     <addaction name="actionRetour_a_la_line"/>
    </widget>
    <addaction name="menuFichier"/>
