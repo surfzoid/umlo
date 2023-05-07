@@ -15,6 +15,7 @@ Source0:        https://github.com/surfzoid/umlo/archive/%{version}/umlo-%{versi
 # List of additional build dependencies
 %if 0%{?mageia}
 BuildRequires:  qtbase5-common-devel
+BuildRequires:  lib64qt5concurrent-devel
 BuildRequires:  pkgconfig(Qt5Widgets)
 %else
 %if 0%{?suse_version}
