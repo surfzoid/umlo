@@ -43,6 +43,14 @@ private slots:
 
     void on_BtnSend_released();
 
+    void on_BtnClearTxt_released();
+
+    void on_BtnZoomOut_released();
+
+    void on_BtnZoomIn_released();
+
+    void on_actionRetour_a_la_line_triggered(bool checked);
+
 public slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void addlabelstatus(QProcess::ProcessState newState);
@@ -65,6 +73,9 @@ private:
 
 signals:
     void computationProgress( QFileInfo FsName);
+
+protected:
+    //void closeEvent(QCloseEvent *event) override;
 
 };
 #endif // UMLO_H

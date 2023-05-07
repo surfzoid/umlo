@@ -4,6 +4,8 @@
 #include <QStandardPaths>
 #include <QDirIterator>
 #include <QMessageBox>
+#include <QSizeGrip>
+#include <QGridLayout>
 
 QString Umlo::UserName = "Ex:surfzoid";
 QString Umlo::PrefixUser = "surf";
@@ -48,11 +50,21 @@ Umlo::Umlo(QWidget *parent)
 
     FindLocalRpm(RpmbuildPath);
     FindLocalRpm(RpmbuildPathX1);
+
+    ui->textEdit->setWindowFlags(Qt::SubWindow);
+
+
+    QSizeGrip * sizeGrip = new QSizeGrip(ui->textEdit);
+
+    QGridLayout * layout = new QGridLayout(ui->textEdit);
+    layout->addWidget(sizeGrip, 0,0,1,1,Qt::AlignBottom | Qt::AlignRight);
+
+
 }
 
 Umlo::~Umlo()
 {
-    SftpProc->start("umount", QStringList() << MountDir->path());
+    SftpProc->startDetached("umount", QStringList() << MountDir->path());
     delete ui;
 }
 
@@ -142,6 +154,11 @@ void Umlo::scanDir(QDir dir)
 
 void Umlo::setProgress(QFileInfo FsName)
 {
+    if (ui->textEdit->textColor() == Qt::black) {
+        ui->textEdit->setTextColor(QColor::fromRgb(255, 165, 0));
+    }else{
+        ui->textEdit->setTextColor(Qt::black);
+    }
     ui->textEdit->append(FsName.fileName());
     QStringList RName = FsName.fileName().split("-");
 
@@ -217,11 +234,20 @@ void Umlo::FindLocalRpm(QDir dir)
         QString VersRel = RpmVers.at(Last - 2) + "-" + Rel.remove(1,1);
         switch(UpCase) {
         case 0:
+            if (ui->textEdit->textColor() == Qt::black) {
+                ui->textEdit->setTextColor(Qt::blue);
+            }else{
+                ui->textEdit->setTextColor(Qt::black);
+            }
 
             ui->textEdit->append(fi.fileName());
 
             if (ui->CmbxRpmList->findText(RName.at(0)) == -1)
+            {
                 ui->CmbxRpmList->addItem(RName.at(0));
+                if (ui->CmbxRpmVers->count() == 0)
+                    on_CmbxRpmList_textActivated(RName.at(0));
+            }
             break;
 
         case 1:
@@ -270,9 +296,41 @@ void Umlo::UploadRpm(QFileInfo Fs)
     }
 
     if (QFile::copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
-
+        ui->textEdit->setTextColor(Qt::green);
         ui->textEdit->append(Fs.fileName() + " copié");
     }else{
+        ui->textEdit->setTextColor(Qt::red);
         ui->textEdit->append("Echec de copie " + Fs.fileName());
     }
+    ui->textEdit->setTextColor(Qt::black);
+}
+
+void Umlo::on_BtnClearTxt_released()
+{
+    ui->textEdit->clear();
+}
+
+void Umlo::on_BtnZoomOut_released()
+{
+    ui->textEdit->zoomOut(1);
+}
+
+void Umlo::on_BtnZoomIn_released()
+{
+    ui->textEdit->zoomIn(1);
+}
+
+//void Umlo::closeEvent(QCloseEvent *event)
+//{
+//}
+
+
+void Umlo::on_actionRetour_a_la_line_triggered(bool checked)
+{
+    if (checked) {
+       ui->textEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+    }else{
+        ui->textEdit->setLineWrapMode(QTextEdit::NoWrap);
+    }
+
 }
