@@ -33,7 +33,15 @@ private slots:
     void on_BtnConect_released();
 
     void on_BtnDeConect_released();
-    void setProgress(QFileInfo FsName);
+    void setProgress(QFileInfo FsName );
+
+    void on_BtnDel_released();
+
+    void on_CmbxRpmList_textActivated(const QString &arg1);
+
+    void on_actionRafraichir_triggered();
+
+    void on_BtnSend_released();
 
 public slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -45,10 +53,18 @@ private:
     QProcess *SftpProc;
     QDir *MountDir;
     QSettings settings;
-    void *scanDir( QDir dir );
+    void *scanDir(QDir dir);
     QFuture <void> future;
+    QString RpmName;
+    int PrCase = 0;
+    int UpCase = 0;
+    QFileInfoList RpmList;
+    void FindLocalRpmVers(QDir dir, QString LocalRpm);
+    void FindLocalRpm(QDir dir);
+    void UploadRpm(QFileInfo Fs);
+
 signals:
-    void computationProgress( QFileInfo FsName );
+    void computationProgress( QFileInfo FsName);
 
 };
 #endif // UMLO_H

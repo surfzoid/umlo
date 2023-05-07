@@ -83,15 +83,57 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>251</width>
-      <height>41</height>
+      <width>166</width>
+      <height>42</height>
      </rect>
     </property>
     <property name="maxVisibleItems">
      <number>50</number>
     </property>
-    <property name="duplicatesEnabled">
-     <bool>true</bool>
+    <property name="sizeAdjustPolicy">
+     <enum>QComboBox::AdjustToContents</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BtnDel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>170</y>
+      <width>141</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Suprimer</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="CmbxRpmVers">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>166</width>
+      <height>42</height>
+     </rect>
+    </property>
+    <property name="maxVisibleItems">
+     <number>50</number>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QComboBox::AdjustToContents</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BtnSend">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>220</y>
+      <width>141</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Envoi</string>
     </property>
    </widget>
   </widget>
@@ -109,6 +151,7 @@
      <string>Fichier</string>
     </property>
     <addaction name="actionPr_f_rences"/>
+    <addaction name="actionRafraichir"/>
    </widget>
    <widget class="QMenu" name="menuAide">
     <property name="title">
@@ -128,6 +171,11 @@
   <action name="actionA_propos">
    <property name="text">
     <string>A propos</string>
+   </property>
+  </action>
+  <action name="actionRafraichir">
+   <property name="text">
+    <string>Rafraichir</string>
    </property>
   </action>
  </widget>
