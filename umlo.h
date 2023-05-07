@@ -51,6 +51,8 @@ private slots:
 
     void on_actionRetour_a_la_line_triggered(bool checked);
 
+    void on_actionA_propos_triggered();
+
 public slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void addlabelstatus(QProcess::ProcessState newState);

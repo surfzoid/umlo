@@ -1,6 +1,7 @@
 #include "umlo.h"
 #include "ui_umlo.h"
 #include "parametres.h"
+#include "about.h"
 #include <QStandardPaths>
 #include <QDirIterator>
 #include <QMessageBox>
@@ -333,4 +334,11 @@ void Umlo::on_actionRetour_a_la_line_triggered(bool checked)
         ui->textEdit->setLineWrapMode(QTextEdit::NoWrap);
     }
 
+}
+
+void Umlo::on_actionA_propos_triggered()
+{
+
+    About *Abt = new About();
+    Abt->show();
 }

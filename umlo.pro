@@ -31,15 +31,18 @@ unix {
     }
 
 SOURCES += \
+    about.cpp \
     main.cpp \
     parametres.cpp \
     umlo.cpp
 
 HEADERS += \
+    about.h \
     parametres.h \
     umlo.h
 
 FORMS += \
+    about.ui \
     parametres.ui \
     umlo.ui
 
