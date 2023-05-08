@@ -1,5 +1,7 @@
 #include "about.h"
 #include "ui_about.h"
+#include <QDesktopServices>
+#include <QUrl>
 
 About::About(QWidget *parent) :
     QDialog(parent),
@@ -13,4 +15,9 @@ About::About(QWidget *parent) :
 About::~About()
 {
     delete ui;
+}
+
+void About::on_pushButton_released()
+{
+    QDesktopServices::openUrl(QUrl("https://www.mageialinux-online.org/wiki/depots-supplementaires-pour-mageia-mlo-repository", QUrl::TolerantMode));
 }
