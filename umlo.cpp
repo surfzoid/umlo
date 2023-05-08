@@ -199,6 +199,9 @@ void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
     QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo di, dil )
         FindLocalRpmVers( QDir( di.absoluteFilePath() ) , LocalRpm);
+
+    ui->CmbxRpmVers->model()->sort(0, Qt::DescendingOrder);
+    ui->CmbxRpmVers->setCurrentIndex(0);
 }
 
 
@@ -237,7 +240,8 @@ void Umlo::FindLocalRpm(QDir dir)
             UpCase=-1;
             break;
         };
-
+        ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
+        ui->CmbxRpmList->setCurrentIndex(0);
     }
 
     QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
@@ -367,25 +371,27 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
     if (fileName.contains("src"))TypeRpm = "SRPM";
 
     QTableWidgetItem *RpmItem = new QTableWidgetItem(RpmName);
-    RpmItem->setFlags(Qt::ItemIsEnabled);
+    RpmItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
     QTableWidgetItem *VersItem = new QTableWidgetItem(MloVers);
-    VersItem->setFlags(Qt::ItemIsEnabled);
+    VersItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
     QTableWidgetItem *ArchItem = new QTableWidgetItem(Arch);
-    ArchItem->setFlags(Qt::ItemIsEnabled);
+    ArchItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
     QTableWidgetItem *TypeItem = new QTableWidgetItem(TypeRpm);
-    TypeItem->setFlags(Qt::ItemIsEnabled);
+    TypeItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
     QTableWidgetItem *WhereIsItem = new QTableWidgetItem(Whereis);
-    WhereIsItem->setFlags(Qt::ItemIsEnabled);
+    WhereIsItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
     QTableWidgetItem *StatusItem = new QTableWidgetItem(Statu);
-    StatusItem->setFlags(Qt::ItemIsEnabled);
+    StatusItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
+    if (Whereis == "SFTP") {
     RpmItem->setBackground(Qt::darkRed);
     RpmItem->setForeground(Qt::white);
+    }
     TypeItem->setBackground(Qt::cyan);
     ArchItem->setBackground(Qt::red);
     ArchItem->setForeground(Qt::white);
