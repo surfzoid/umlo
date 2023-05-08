@@ -1,11 +1,11 @@
 Name:           umlo
 Summary:        umlo for French MLO Repository
-Version:        1.0.0
+Version:        1.0.1
 
 %if 0%{?mageia}
-Release:        %mkrel 4
+Release:        %mkrel 1
 %else
-Release:        4.surf.mlo
+Release:        1.surf.mlo
 %endif
 
 License:        GPLv3
@@ -70,3 +70,7 @@ chmod -R ug+rw %{_srcrpmdir}
 %changelog
 * Sun May 7 2023 surfzoid@gmail.com
 + First beta release.
+
+* Mon May 8 2023 surfzoid@gmail.com
++ Use a QtableWidget.
++ Filter rpm list.

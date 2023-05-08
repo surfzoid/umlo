@@ -7,6 +7,10 @@
 #include <QMessageBox>
 #include <QSizeGrip>
 #include <QGridLayout>
+#include <QtDebug>
+#include <QTextBlockGroup>
+#include <QTextFormat>
+#include <QTextDocument>
 
 QString Umlo::UserName = "Ex:surfzoid";
 QString Umlo::PrefixUser = "surf";
@@ -25,7 +29,6 @@ Umlo::Umlo(QWidget *parent)
     connect(SftpProc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             [=](int exitCode, QProcess::ExitStatus exitStatus){ Umlo::processFinished(exitCode,exitStatus); });
 
-    connect(SftpProc, &QProcess::stateChanged, this, &Umlo::addlabelstatus);
     connect(SftpProc, &QProcess::readyReadStandardOutput, this, &Umlo::processreadyReadStandardOutput);
 
     settings.beginGroup("umlo");
@@ -52,14 +55,13 @@ Umlo::Umlo(QWidget *parent)
     FindLocalRpm(RpmbuildPath);
     FindLocalRpm(RpmbuildPathX1);
 
-    ui->textEdit->setWindowFlags(Qt::SubWindow);
+    ui->TableWRpm->setWindowFlags(Qt::SubWindow);
 
 
-    QSizeGrip * sizeGrip = new QSizeGrip(ui->textEdit);
+    QSizeGrip * sizeGrip = new QSizeGrip(ui->TableWRpm);
 
-    QGridLayout * layout = new QGridLayout(ui->textEdit);
+    QGridLayout * layout = new QGridLayout(ui->TableWRpm);
     layout->addWidget(sizeGrip, 0,0,1,1,Qt::AlignBottom | Qt::AlignRight);
-
 
 }
 
@@ -94,17 +96,6 @@ void Umlo::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
             ui->StatuLbl->setText("Echec de connection");
         }else{
             ui->StatuLbl->setText("Connection ok");
-            /*QStringList filters;
-                 filters << "*surf*";
-                 MountDir->setNameFilters(filters);
-            QFileInfoList Test = MountDir->entryInfoList();
-            QDirIterator it(MountDir->path(), QStringList() << "*surf*", QDir::Files, QDirIterator::Subdirectories);
-            while (it.hasNext()) {
-                QFile f(it.next());
-                f.open(QIODevice::ReadOnly);
-
-                ui->textEdit->append(f.fileName());
-            }*/
 
             ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur...");
 
@@ -119,11 +110,6 @@ void Umlo::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 void Umlo::processreadyReadStandardOutput()
 {
     //ui->TxtDebug->append(SftpProc->readAllStandardOutput());
-
-}
-
-void Umlo::addlabelstatus(QProcess::ProcessState newState)
-{
 
 }
 
@@ -144,7 +130,6 @@ void Umlo::scanDir(QDir dir)
 {
     QFileInfoList fil = dir.entryInfoList( QStringList( RpmName + "*" + PrefixUser + "*rpm" ), QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo fi, fil )
-        //ui->textEdit->append(fi.fileName());
         emit computationProgress(fi);
 
     QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase );
@@ -155,12 +140,7 @@ void Umlo::scanDir(QDir dir)
 
 void Umlo::setProgress(QFileInfo FsName)
 {
-    if (ui->textEdit->textColor() == Qt::black) {
-        ui->textEdit->setTextColor(QColor::fromRgb(255, 165, 0));
-    }else{
-        ui->textEdit->setTextColor(Qt::black);
-    }
-    ui->textEdit->append(FsName.fileName());
+    Populate(FsName.fileName(), "SFTP", "Aucun");
     QStringList RName = FsName.fileName().split("-");
 
     switch(PrCase) {
@@ -174,8 +154,7 @@ void Umlo::setProgress(QFileInfo FsName)
 
     case 1:
         QFile::remove(FsName.path() + "/" + FsName.fileName() );
-        ui->textEdit->append("suprimé");
-        //ui->CmbxRpmList->removeItem(ui->CmbxRpmList->findText(RName.at(0)));
+        Populate(FsName.fileName(), "SFTP", "suprimé");
         break;
     default:
         PrCase=-1;
@@ -241,8 +220,7 @@ void Umlo::FindLocalRpm(QDir dir)
                 ui->textEdit->setTextColor(Qt::black);
             }
 
-            ui->textEdit->append(fi.fileName());
-
+            Populate(fi.fileName(), "Local", "Aucun");
             if (ui->CmbxRpmList->findText(RName.at(0)) == -1)
             {
                 ui->CmbxRpmList->addItem(RName.at(0));
@@ -271,8 +249,9 @@ void Umlo::on_actionRafraichir_triggered()
     UpCase=0;
     ui->CmbxRpmList->clear();
     ui->textEdit->clear();
+    clearitems();
     FindLocalRpm(RpmbuildPath);
-    FindLocalRpm(RpmbuildPathX1);
+    //    FindLocalRpm(RpmbuildPathX1);
 }
 
 void Umlo::on_BtnSend_released()
@@ -297,11 +276,9 @@ void Umlo::UploadRpm(QFileInfo Fs)
     }
 
     if (QFile::copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
-        ui->textEdit->setTextColor(Qt::green);
-        ui->textEdit->append(Fs.fileName() + " copié");
+        Populate(Fs.fileName(), "SFTP", "copié");
     }else{
-        ui->textEdit->setTextColor(Qt::red);
-        ui->textEdit->append("Echec de copie " + Fs.fileName());
+        Populate(Fs.fileName(), "SFTP", "Echec de copie");
     }
     ui->textEdit->setTextColor(Qt::black);
 }
@@ -309,6 +286,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
 void Umlo::on_BtnClearTxt_released()
 {
     ui->textEdit->clear();
+    clearitems();
 }
 
 void Umlo::on_BtnZoomOut_released()
@@ -329,7 +307,7 @@ void Umlo::on_BtnZoomIn_released()
 void Umlo::on_actionRetour_a_la_line_triggered(bool checked)
 {
     if (checked) {
-       ui->textEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+        ui->textEdit->setLineWrapMode(QTextEdit::WidgetWidth);
     }else{
         ui->textEdit->setLineWrapMode(QTextEdit::NoWrap);
     }
@@ -341,4 +319,102 @@ void Umlo::on_actionA_propos_triggered()
 
     About *Abt = new About();
     Abt->show();
+}
+
+void Umlo::on_TextFilter_textChanged(const QString &arg1)
+{
+    for (int i=0; i< ui->TableWRpm->rowCount(); i++) {
+        ui->TableWRpm->showRow(i);
+        if (arg1.length() > 0) {
+            QTableWidgetItem *RpmItem = ui->TableWRpm->takeItem(i, 0);
+            RpmItem->setFlags(Qt::ItemIsEnabled);
+            if (!RpmItem->text().contains(arg1))
+            {
+                ui->TableWRpm->hideRow(i);
+            }
+            ui->TableWRpm->setItem(i, 0, RpmItem);
+        }
+    }
+
+    ui->TableWRpm->selectRow(ui->TableWRpm->rowCount() - 1);
+}
+
+void Umlo::clearitems()
+{
+    //clear the table items of file list
+    for (int i=0; i< ui->TableWRpm->rowCount(); i++)
+    {
+        for (int j=0; j< ui->TableWRpm->columnCount(); j++ )
+        {
+            delete ui->TableWRpm->takeItem(i, j);
+        }
+        ui->TableWRpm->removeRow(i);
+    }
+    ui->TableWRpm->setRowCount(0);
+    return;
+}
+
+void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
+{
+    ui->TableWRpm->horizontalHeader()->sortIndicatorOrder();
+
+    QString RpmName = fileName.split(PrefixUser).at(0);
+    RpmName = RpmName.remove(RpmName.length() - 1,1);
+    QString MloVers = fileName.split(PrefixUser).at(1).split(".").at(1);
+    QStringList ArchType = fileName.split(MloVers).at(1).split(".");
+    QString Arch = ArchType.at(1);
+    QString TypeRpm = "rpm";
+    if (fileName.contains("src"))TypeRpm = "SRPM";
+
+    QTableWidgetItem *RpmItem = new QTableWidgetItem(RpmName);
+    RpmItem->setFlags(Qt::ItemIsEnabled);
+
+    QTableWidgetItem *VersItem = new QTableWidgetItem(MloVers);
+    VersItem->setFlags(Qt::ItemIsEnabled);
+
+    QTableWidgetItem *ArchItem = new QTableWidgetItem(Arch);
+    ArchItem->setFlags(Qt::ItemIsEnabled);
+
+    QTableWidgetItem *TypeItem = new QTableWidgetItem(TypeRpm);
+    TypeItem->setFlags(Qt::ItemIsEnabled);
+
+    QTableWidgetItem *WhereIsItem = new QTableWidgetItem(Whereis);
+    WhereIsItem->setFlags(Qt::ItemIsEnabled);
+
+    QTableWidgetItem *StatusItem = new QTableWidgetItem(Statu);
+    StatusItem->setFlags(Qt::ItemIsEnabled);
+
+    RpmItem->setBackground(Qt::darkRed);
+    RpmItem->setForeground(Qt::white);
+    TypeItem->setBackground(Qt::cyan);
+    ArchItem->setBackground(Qt::red);
+    ArchItem->setForeground(Qt::white);
+
+    if (Statu.contains("Echec") or Statu.contains("sup"))
+    {
+        StatusItem->setForeground(Qt::red);
+    }else{
+        StatusItem->setForeground(Qt::green);
+    }
+
+    int row = ui->TableWRpm->rowCount();
+    ui->TableWRpm->insertRow(row);
+    ui->TableWRpm->setItem(row, 0, RpmItem);
+    ui->TableWRpm->setItem(row, 1, VersItem);
+    ui->TableWRpm->setItem(row, 2, ArchItem);
+    ui->TableWRpm->setItem(row, 3, TypeItem);
+    ui->TableWRpm->setItem(row, 4, WhereIsItem);
+    ui->TableWRpm->setItem(row, 5, StatusItem);
+
+    QHeaderView *header = ui->TableWRpm->horizontalHeader();
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    int CurRow = ui->TableWRpm->currentRow();
+    QTableWidgetItem *item=new QTableWidgetItem(windowIcon(),QString::number(CurRow ),0);//set Icon a and string 1
+
+    ui->TableWRpm->setVerticalHeaderItem(CurRow,item);
+
+    ui->TableWRpm->selectRow(ui->TableWRpm->rowCount() - 1);
+    return;
+
 }

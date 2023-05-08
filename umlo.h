@@ -5,9 +5,9 @@
 #include <QProcess>
 #include <QSettings>
 #include <QDir>
-#include <QDebug>
 #include <qtconcurrentrun.h>
 #include <QFutureWatcher>
+#include <QTextBlock>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Umlo; }
@@ -53,9 +53,10 @@ private slots:
 
     void on_actionA_propos_triggered();
 
+    void on_TextFilter_textChanged(const QString &arg1);
+
 public slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void addlabelstatus(QProcess::ProcessState newState);
     void processreadyReadStandardOutput();
 
 private:
@@ -72,6 +73,8 @@ private:
     void FindLocalRpmVers(QDir dir, QString LocalRpm);
     void FindLocalRpm(QDir dir);
     void UploadRpm(QFileInfo Fs);
+    void clearitems();
+    void Populate(QString fileName, QString Whereis, QString Statu);
 
 signals:
     void computationProgress( QFileInfo FsName);
