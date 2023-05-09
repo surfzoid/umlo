@@ -8,6 +8,7 @@
 #include <qtconcurrentrun.h>
 #include <QFutureWatcher>
 #include <QTextBlock>
+#include <simplecrypt.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Umlo; }
@@ -21,11 +22,14 @@ public:
     Umlo(QWidget *parent = nullptr);
     ~Umlo();
     static QString UserName;
+    static QString UserPass;
     static QString PrefixUser;
     static QString RpmbuildPath;
     static QString RpmbuildPathX1;
     static QString MloMount;
     void Init();
+
+    static SimpleCrypt crypto;
 
 private slots:
     void on_actionPr_f_rences_triggered();

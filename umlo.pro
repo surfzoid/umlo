@@ -35,6 +35,7 @@ SOURCES += \
     about.cpp \
     main.cpp \
     parametres.cpp \
+    simplecrypt.cpp \
     umlo.cpp
 
 HEADERS += \

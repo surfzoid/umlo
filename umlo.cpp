@@ -13,10 +13,13 @@
 #include <QTextDocument>
 
 QString Umlo::UserName = "Ex:surfzoid";
+QString Umlo::UserPass = "hik12345";
 QString Umlo::PrefixUser = "surf";
 QString Umlo::RpmbuildPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild";
 QString Umlo::RpmbuildPathX1 = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild/mga9";
 QString Umlo::MloMount = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/";
+
+SimpleCrypt Umlo::crypto;
 
 Umlo::Umlo(QWidget *parent)
     : QMainWindow(parent)
@@ -31,6 +34,12 @@ Umlo::Umlo(QWidget *parent)
 
     connect(SftpProc, &QProcess::readyReadStandardOutput, this, &Umlo::processreadyReadStandardOutput);
 
+    //settings//
+    QCoreApplication::setOrganizationName("Surfzoid");
+    QCoreApplication::setOrganizationDomain("https://github.com/surfzoid");
+    QCoreApplication::setApplicationName("umlo");
+
+    crypto.setKey(Q_UINT64_C(0x0c2ad4a4acb9f023 * 3));//some random number
     settings.beginGroup("umlo");
     QStringList keys = settings.allKeys();
 
@@ -78,7 +87,11 @@ void Umlo::Init()
     }
     ui->StatuLbl->setText("Connection a " + UserName + "@repository.mageialinux-online.org:2222");
 
+    if (UserPass == "") {
     SftpProc->start("sshfs", QStringList() << UserName + "@repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C");
+    }else{
+        SftpProc->start("SSHPASS=\"" + UserPass + "\"", QStringList() << "sshfs" << "repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C" << "-o" << "ssh_command=\"sshpass" << "-e" << "ssh" << "-l" << UserName + "\"");
+    }
 }
 
 void Umlo::on_actionPr_f_rences_triggered()
