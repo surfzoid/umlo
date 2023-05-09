@@ -59,4 +59,5 @@ DISTFILES += \
     README.md \
     umlo.desktop \
     images/umlo.ico \
-    images/umlo.png
+    images/umlo.png \
+    umlo.spec

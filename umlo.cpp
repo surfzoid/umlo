@@ -53,7 +53,7 @@ Umlo::Umlo(QWidget *parent)
     connect(this, &Umlo::computationProgress, this, &Umlo::setProgress, Qt::QueuedConnection);
 
     FindLocalRpm(RpmbuildPath);
-    FindLocalRpm(RpmbuildPathX1);
+//    FindLocalRpm(RpmbuildPathX1);
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
 
@@ -140,12 +140,11 @@ void Umlo::scanDir(QDir dir)
 
 void Umlo::setProgress(QFileInfo FsName)
 {
-    Populate(FsName.fileName(), "SFTP", "Aucun");
     QStringList RName = FsName.fileName().split("-");
 
     switch(PrCase) {
     case 0:
-
+        Populate(FsName.fileName(), "SFTP", "Aucun");
         if (future.isFinished())
         {
             ui->textEdit->append("Fin de la liste");
@@ -180,7 +179,7 @@ void Umlo::on_CmbxRpmList_textActivated(const QString &arg1)
 {
     ui->CmbxRpmVers->clear();
     FindLocalRpmVers(RpmbuildPath, arg1);
-    FindLocalRpmVers(RpmbuildPathX1, arg1);
+//    FindLocalRpmVers(RpmbuildPathX1, arg1);
 }
 
 void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
@@ -229,6 +228,8 @@ void Umlo::FindLocalRpm(QDir dir)
                 ui->CmbxRpmList->addItem(RName.at(0));
                 if (ui->CmbxRpmVers->count() == 0)
                     on_CmbxRpmList_textActivated(RName.at(0));
+                ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
+                ui->CmbxRpmList->setCurrentIndex(0);
             }
             break;
 
@@ -240,8 +241,6 @@ void Umlo::FindLocalRpm(QDir dir)
             UpCase=-1;
             break;
         };
-        ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
-        ui->CmbxRpmList->setCurrentIndex(0);
     }
 
     QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
@@ -261,8 +260,9 @@ void Umlo::on_actionRafraichir_triggered()
 void Umlo::on_BtnSend_released()
 {
     UpCase=1;
-    FindLocalRpm(RpmbuildPath);
+//    FindLocalRpm(RpmbuildPath);
     //FindLocalRpm(RpmbuildPathX1);
+    future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
 }
 
@@ -331,7 +331,7 @@ void Umlo::on_TextFilter_textChanged(const QString &arg1)
         ui->TableWRpm->showRow(i);
         if (arg1.length() > 0) {
             QTableWidgetItem *RpmItem = ui->TableWRpm->takeItem(i, 0);
-            RpmItem->setFlags(Qt::ItemIsEnabled);
+            RpmItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
             if (!RpmItem->text().contains(arg1))
             {
                 ui->TableWRpm->hideRow(i);

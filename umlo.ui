@@ -195,6 +195,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="BtnZoomIn">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>870</x>
@@ -254,6 +257,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="BtnZoomOut">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>830</x>
