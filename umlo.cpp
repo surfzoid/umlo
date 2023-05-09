@@ -39,11 +39,13 @@ Umlo::Umlo(QWidget *parent)
     QCoreApplication::setOrganizationDomain("https://github.com/surfzoid");
     QCoreApplication::setApplicationName("umlo");
 
+    QSettings settings;
     crypto.setKey(Q_UINT64_C(0x0c2ad4a4acb9f023 * 3));//some random number
     settings.beginGroup("umlo");
     QStringList keys = settings.allKeys();
 
     Umlo::UserName = settings.value("UserName", Umlo::UserName).value<QString>();
+    Umlo::UserPass = Umlo::crypto.decryptToString(settings.value("Password", "hik12345").value<QString>());
     Umlo::PrefixUser = settings.value("PrefixUser", Umlo::PrefixUser).value<QString>();
     Umlo::RpmbuildPath = settings.value("RpmbuildPath", Umlo::RpmbuildPath).value<QString>();
     Umlo::RpmbuildPathX1 = settings.value("RpmbuildPathX1", Umlo::RpmbuildPathX1).value<QString>();
