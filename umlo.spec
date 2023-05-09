@@ -68,7 +68,7 @@ chmod -R ug+rw %{_srcrpmdir}
 %{_datadir}/umlo/translations/umlo_fr_FR.qm
 
 %changelog
-* Thu May 9 2023 surfzoid@gmail.com
+* Tue May 9 2023 surfzoid@gmail.com
 - Bug line number.
 
 * Mon May 8 2023 surfzoid@gmail.com
