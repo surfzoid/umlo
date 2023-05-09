@@ -416,9 +416,9 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
     header->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     int CurRow = ui->TableWRpm->currentRow();
-    QTableWidgetItem *item=new QTableWidgetItem(windowIcon(),QString::number(CurRow ),0);//set Icon a and string 1
+    QTableWidgetItem *item=new QTableWidgetItem(windowIcon(),QString::number(CurRow + 1),0);//set Icon a and string 1
 
-    ui->TableWRpm->setVerticalHeaderItem(CurRow,item);
+    ui->TableWRpm->setVerticalHeaderItem(CurRow + 1,item);
 
     ui->TableWRpm->selectRow(ui->TableWRpm->rowCount() - 1);
     return;

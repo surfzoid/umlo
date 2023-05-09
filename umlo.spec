@@ -3,9 +3,9 @@ Summary:        umlo for French MLO Repository
 Version:        1.0.1
 
 %if 0%{?mageia}
-Release:        %mkrel 1
+Release:        %mkrel 2
 %else
-Release:        1.surf.mlo
+Release:        2.surf.mlo
 %endif
 
 License:        GPLv3
@@ -68,9 +68,12 @@ chmod -R ug+rw %{_srcrpmdir}
 %{_datadir}/umlo/translations/umlo_fr_FR.qm
 
 %changelog
-* Sun May 7 2023 surfzoid@gmail.com
-+ First beta release.
+* Thu May 9 2023 surfzoid@gmail.com
+- Bug line number.
 
 * Mon May 8 2023 surfzoid@gmail.com
 + Use a QtableWidget.
 + Filter rpm list.
+
+* Sun May 7 2023 surfzoid@gmail.com
++ First beta release.
