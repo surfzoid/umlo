@@ -64,7 +64,7 @@ Umlo::Umlo(QWidget *parent)
     connect(this, &Umlo::computationProgress, this, &Umlo::setProgress, Qt::QueuedConnection);
 
     FindLocalRpm(RpmbuildPath);
-//    FindLocalRpm(RpmbuildPathX1);
+    //    FindLocalRpm(RpmbuildPathX1);
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
 
@@ -87,12 +87,30 @@ void Umlo::Init()
     if (!MountDir->exists()) {
         MountDir->mkpath(MountDir->path());
     }
-    ui->StatuLbl->setText("Connection a " + UserName + "@repository.mageialinux-online.org:2222");
 
-    if (UserPass == "") {
-    SftpProc->start("sshfs", QStringList() << UserName + "@repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C");
+    MountDir->refresh();
+    if (MountDir->count() <= 2) {
+        int ret = QMessageBox::warning(this,tr("Confirmation "),tr("Le répertoire de montage ssh ") + MountDir->path()+ tr("/ est vide, essayer de le monter ou annuler pour le monter manuellement."),QMessageBox::Ok | QMessageBox::Cancel);
+        if (ret == QMessageBox::Cancel)
+            return;
+
+        ui->StatuLbl->setText("Connection a " + UserName + "@repository.mageialinux-online.org:2222");
+
+        //        SftpProc->start("sshfs", QStringList() << "--help");
+
+        if (UserPass == "") {
+            SftpProc->start("sshfs", QStringList() << UserName + "@repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C");
+        }else{
+            SftpProc->start("SSHPASS=\"" + UserPass + "\"", QStringList() << "sshfs" << "repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C" << "-o" << "ssh_command=\"sshpass" << "-e" << "ssh" << "-l" << UserName + "\"");
+        }
     }else{
-        SftpProc->start("SSHPASS=\"" + UserPass + "\"", QStringList() << "sshfs" << "repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C" << "-o" << "ssh_command=\"sshpass" << "-e" << "ssh" << "-l" << UserName + "\"");
+        ui->StatuLbl->setText("Connection ok");
+
+        ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur...");
+
+        RpmName = "";
+        PrCase=0;
+        future = QtConcurrent::run(this, &Umlo::scanDir, MountDir->path());
     }
 }
 
@@ -106,8 +124,9 @@ void Umlo::on_actionPr_f_rences_triggered()
 
 void Umlo::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    if (exitCode == 1 && SftpProc->program() == "sshfs") {
-        if (MountDir->count() == 0) {
+    if (exitCode == 0 && SftpProc->program() == "sshfs") {
+        MountDir->refresh();
+        if (MountDir->count() <= 2) {
             ui->StatuLbl->setText("Echec de connection");
         }else{
             ui->StatuLbl->setText("Connection ok");
@@ -178,6 +197,12 @@ void Umlo::setProgress(QFileInfo FsName)
 
 void Umlo::on_BtnDel_released()
 {
+    MountDir->refresh();
+    if (MountDir->count() <= 2) {
+        QMessageBox::critical(this,tr("Confirmation "),tr("Le répertoire de montage ssh ") + MountDir->path()+ tr("/ est vide, essayer de le monter."),QMessageBox::Ok);
+        return;
+    }
+
     PrCase=1;
 
     int ret = QMessageBox::warning(this,tr("Confirmation "),tr("Cette action vas effacer sur le serveur tous les rpms et srpm de ") + ui->CmbxRpmList->currentText(),QMessageBox::Ok | QMessageBox::Cancel);
@@ -193,8 +218,10 @@ void Umlo::on_BtnDel_released()
 void Umlo::on_CmbxRpmList_textActivated(const QString &arg1)
 {
     ui->CmbxRpmVers->clear();
-    FindLocalRpmVers(RpmbuildPath, arg1);
-//    FindLocalRpmVers(RpmbuildPathX1, arg1);
+    QDir dir(RpmbuildPath);
+    dir.refresh();
+    FindLocalRpmVers(dir, arg1);
+    //    FindLocalRpmVers(RpmbuildPathX1, arg1);
 }
 
 void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
@@ -274,8 +301,13 @@ void Umlo::on_actionRafraichir_triggered()
 
 void Umlo::on_BtnSend_released()
 {
+    MountDir->refresh();
+    if (MountDir->count() <= 2) {
+        QMessageBox::critical(this,tr("Confirmation "),tr("Le répertoire de montage ssh ") + MountDir->path()+ tr("/ est vide, essayer de le monter."),QMessageBox::Ok);
+        return;
+    }
     UpCase=1;
-//    FindLocalRpm(RpmbuildPath);
+    //    FindLocalRpm(RpmbuildPath);
     //FindLocalRpm(RpmbuildPathX1);
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
@@ -404,8 +436,8 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
     StatusItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
 
     if (Whereis == "SFTP") {
-    RpmItem->setBackground(Qt::darkRed);
-    RpmItem->setForeground(Qt::white);
+        RpmItem->setBackground(Qt::darkRed);
+        RpmItem->setForeground(Qt::white);
     }
     TypeItem->setBackground(Qt::cyan);
     ArchItem->setBackground(Qt::red);
