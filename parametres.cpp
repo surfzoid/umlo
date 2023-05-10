@@ -8,9 +8,9 @@ Parametres::Parametres(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings settings;
     QString FsSettings =  settings.fileName();
     settings.beginGroup("umlo");
-    QStringList keys = settings.allKeys();
 
     Umlo::UserName = settings.value("UserName", Umlo::UserName).value<QString>();
     Umlo::UserPass = Umlo::crypto.decryptToString(settings.value("Password", "hik12345").value<QString>());
@@ -25,8 +25,6 @@ Parametres::Parametres(QWidget *parent) :
     ui->PrefixUserEd->setText(Umlo::PrefixUser);
     ui->RpmbuildEd->setText(Umlo::RpmbuildPath);
     ui->Rpmbuildx1Ed->setText(Umlo::RpmbuildPathX1);
-
-    settings.endGroup();
 }
 
 Parametres::~Parametres()
