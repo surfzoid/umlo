@@ -16,7 +16,7 @@ Parametres::Parametres(QWidget *parent) :
     Umlo::UserPass = Umlo::crypto.decryptToString(settings.value("Password", "hik12345").value<QString>());
     Umlo::PrefixUser = settings.value("PrefixUser", Umlo::PrefixUser).value<QString>();
     Umlo::RpmbuildPath = settings.value("RpmbuildPath", Umlo::RpmbuildPath).value<QString>();
-    Umlo::RpmbuildPathX1 = settings.value("RpmbuildPathX1", Umlo::RpmbuildPathX1).value<QString>();
+    Umlo::MloMount = settings.value("MloMount", Umlo::MloMount).value<QString>();
 
     settings.endGroup();
 
@@ -24,7 +24,7 @@ Parametres::Parametres(QWidget *parent) :
     ui->PassEd->setText(Umlo::UserPass);
     ui->PrefixUserEd->setText(Umlo::PrefixUser);
     ui->RpmbuildEd->setText(Umlo::RpmbuildPath);
-    ui->Rpmbuildx1Ed->setText(Umlo::RpmbuildPathX1);
+    ui->RootEd->setText(Umlo::MloMount);
 }
 
 Parametres::~Parametres()
@@ -40,7 +40,7 @@ void Parametres::on_BtnSave_released()
     settings.setValue("Password",Umlo::crypto.encryptToString(ui->PassEd->text()) );
     settings.setValue( "PrefixUser", ui->PrefixUserEd->text());
     settings.setValue("RpmbuildPath", ui->RpmbuildEd->text());
-    settings.setValue("RpmbuildPathX1", ui->Rpmbuildx1Ed->text());
+    settings.setValue("MloMount", ui->RootEd->text());
 
     settings.endGroup();
     settings.sync();
@@ -49,7 +49,7 @@ void Parametres::on_BtnSave_released()
     Umlo::UserPass = ui->PassEd->text();
     Umlo::PrefixUser = ui->PrefixUserEd->text();
     Umlo::RpmbuildPath = ui->RpmbuildEd->text();
-    Umlo::RpmbuildPathX1 = ui->Rpmbuildx1Ed->text();
+    Umlo::MloMount = ui->RootEd->text();
     //Umlo().Init();
     close();
 }

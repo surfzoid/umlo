@@ -25,7 +25,6 @@ public:
     static QString UserPass;
     static QString PrefixUser;
     static QString RpmbuildPath;
-    static QString RpmbuildPathX1;
     static QString MloMount;
     void Init();
 

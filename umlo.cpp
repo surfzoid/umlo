@@ -16,7 +16,6 @@ QString Umlo::UserName = "Ex:surfzoid";
 QString Umlo::UserPass = "hik12345";
 QString Umlo::PrefixUser = "surf";
 QString Umlo::RpmbuildPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild";
-QString Umlo::RpmbuildPathX1 = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild/mga9";
 QString Umlo::MloMount = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/";
 
 SimpleCrypt Umlo::crypto;
@@ -27,6 +26,7 @@ Umlo::Umlo(QWidget *parent)
 {
     ui->setupUi(this);
     ui->statusbar->addPermanentWidget(ui->StatuLbl,1);
+    MloMount.append( UserName + "/mlossh");
 
     SftpProc = new QProcess(this);
     connect(SftpProc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
@@ -48,14 +48,14 @@ Umlo::Umlo(QWidget *parent)
     Umlo::UserPass = Umlo::crypto.decryptToString(settings.value("Password", "hik12345").value<QString>());
     Umlo::PrefixUser = settings.value("PrefixUser", Umlo::PrefixUser).value<QString>();
     Umlo::RpmbuildPath = settings.value("RpmbuildPath", Umlo::RpmbuildPath).value<QString>();
-    Umlo::RpmbuildPathX1 = settings.value("RpmbuildPathX1", Umlo::RpmbuildPathX1).value<QString>();
+    Umlo::MloMount = settings.value("MloMount", Umlo::MloMount).value<QString>();
 
     settings.endGroup();
 
     if (UserName == "Ex:surfzoid")
         Umlo::on_actionPr_f_rences_triggered();
 
-    MountDir = new QDir(MloMount + UserName + "/mlossh");
+    MountDir = new QDir(MloMount);
 
     auto futureWatcher = new QFutureWatcher<void>(this);
     connect(futureWatcher, &QFutureWatcher<void>::finished, futureWatcher, &QFutureWatcher<void>::deleteLater);
@@ -64,7 +64,7 @@ Umlo::Umlo(QWidget *parent)
     connect(this, &Umlo::computationProgress, this, &Umlo::setProgress, Qt::QueuedConnection);
 
     FindLocalRpm(RpmbuildPath);
-    //    FindLocalRpm(RpmbuildPathX1);
+    //    FindLocalRpm(MloMount);
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
 
@@ -221,7 +221,7 @@ void Umlo::on_CmbxRpmList_textActivated(const QString &arg1)
     QDir dir(RpmbuildPath);
     dir.refresh();
     FindLocalRpmVers(dir, arg1);
-    //    FindLocalRpmVers(RpmbuildPathX1, arg1);
+    //    FindLocalRpmVers(MloMount, arg1);
 }
 
 void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
@@ -296,7 +296,7 @@ void Umlo::on_actionRafraichir_triggered()
     ui->textEdit->clear();
     clearitems();
     FindLocalRpm(RpmbuildPath);
-    //    FindLocalRpm(RpmbuildPathX1);
+    //    FindLocalRpm(MloMount);
 }
 
 void Umlo::on_BtnSend_released()
@@ -308,7 +308,7 @@ void Umlo::on_BtnSend_released()
     }
     UpCase=1;
     //    FindLocalRpm(RpmbuildPath);
-    //FindLocalRpm(RpmbuildPathX1);
+    //FindLocalRpm(MloMount);
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
 }

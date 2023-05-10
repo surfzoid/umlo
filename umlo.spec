@@ -72,6 +72,7 @@ chmod -R ug+rw %{_srcrpmdir}
 + Ask to conect manualy.
 + Refresh dir before scan.
 + Check if mounted before operations.
++ Custom ssh root path in settings.
 
 * Tue May 9 2023 surfzoid@gmail.com
 - Bug line number.
