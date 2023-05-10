@@ -321,9 +321,9 @@ void Umlo::UploadRpm(QFileInfo Fs)
     QString Arch = Fs.fileName().split(MloVers).at(1).split(".").at(1);
     QString DestDir;
     if (Arch == "src") {
-        DestDir = MloMount + UserName + "/mlossh/" + MloVersDir + "/SRPMS/media/core/";
+        DestDir = MountDir->absolutePath() + "/" + MloVersDir + "/SRPMS/media/core/";
     }else{
-        DestDir = MloMount + UserName + "/mlossh/" + MloVersDir + "/" + Arch + "/media/core/";
+        DestDir = MountDir->absolutePath() + "/" + MloVersDir + "/" + Arch + "/media/core/";
     }
 
     if (QFile::copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
@@ -462,12 +462,12 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
     QHeaderView *header = ui->TableWRpm->horizontalHeader();
     header->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    int CurRow = ui->TableWRpm->currentRow();
-    QTableWidgetItem *item=new QTableWidgetItem(windowIcon(),QString::number(CurRow + 1),0);//set Icon a and string 1
+    int CurRow = ui->TableWRpm->rowCount() + 1;
+    QTableWidgetItem *item=new QTableWidgetItem(windowIcon(),QString::number(row),0);//set Icon a and string 1
 
-    ui->TableWRpm->setVerticalHeaderItem(CurRow + 1,item);
+    ui->TableWRpm->setVerticalHeaderItem(row,item);
 
-    ui->TableWRpm->selectRow(ui->TableWRpm->rowCount() - 1);
+ui->TableWRpm->scrollToBottom();
     return;
 
 }
