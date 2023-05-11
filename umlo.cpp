@@ -293,7 +293,7 @@ void Umlo::on_actionRafraichir_triggered()
 {
     UpCase=0;
     ui->CmbxRpmList->clear();
-    ui->textEdit->clear();
+//    ui->textEdit->clear();
     clearitems();
     FindLocalRpm(RpmbuildPath);
     //    FindLocalRpm(MloMount);
@@ -336,7 +336,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
 
 void Umlo::on_BtnClearTxt_released()
 {
-    ui->textEdit->clear();
+//    ui->textEdit->clear();
     clearitems();
 }
 

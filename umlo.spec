@@ -3,9 +3,9 @@ Summary:        umlo for French MLO Repository
 Version:        1.0.3
 
 %if 0%{?mageia}
-Release:        %mkrel 1
+Release:        %mkrel 2
 %else
-Release:        1.surf.mlo
+Release:        2.surf.mlo
 %endif
 
 License:        GPLv3
@@ -28,7 +28,8 @@ BuildRequires:  pkgconfig(Qt5)
 Requires: qtbase5-common
  
 %description
-A client for rpm builders to manage MLO Repository
+A client for rpm builders to manage MLO Repository.
+It increase productivity and reduce stress by freeing mind of where to put rpm at good place.
 
 %prep
 %autosetup -n umlo-%{version}
