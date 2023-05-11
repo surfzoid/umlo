@@ -1,4 +1,4 @@
-#include "umlo.h"
+﻿#include "umlo.h"
 #include "ui_umlo.h"
 #include "parametres.h"
 #include "about.h"
@@ -11,6 +11,7 @@
 #include <QTextBlockGroup>
 #include <QTextFormat>
 #include <QTextDocument>
+#include <QProgressDialog>
 
 QString Umlo::UserName = "Ex:surfzoid";
 QString Umlo::UserPass = "hik12345";
@@ -205,11 +206,11 @@ void Umlo::on_BtnDel_released()
         return;
     }
 
-    PrCase=1;
-
     int ret = QMessageBox::warning(this,tr("Confirmation "),tr("Cette action vas effacer sur le serveur tous les rpms et srpm de ") + ui->CmbxRpmList->currentText(),QMessageBox::Ok | QMessageBox::Cancel);
     if (ret == QMessageBox::Cancel)
         return;
+
+    PrCase=1;
 
     RpmName = ui->CmbxRpmList->currentText();
     future = QtConcurrent::run(this, &Umlo::scanDir, MountDir->path());
@@ -329,11 +330,48 @@ void Umlo::UploadRpm(QFileInfo Fs)
         DestDir = MountDir->absolutePath() + "/" + MloVersDir + "/" + Arch + "/media/core/";
     }
 
-    if (QFile::copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
-        Populate(Fs.fileName(), "SFTP", "copié");
-    }else{
-        Populate(Fs.fileName(), "SFTP", "Echec de copie");
+    bool FailCp = false;
+    QFile fromFile(Fs.absoluteFilePath());
+    QFile toFile(DestDir + Fs.fileName());
+
+
+    qint64 toFileSize = fromFile.size();
+    if (toFileSize > 0) {
+        ui->textEdit->setTextColor(Qt::red);
+        ui->textEdit->append(tr("Le fichier ") + Fs.fileName() + tr(" existe deja sur le serveur."));
+        ui->textEdit->setTextColor(Qt::black);
+        future.cancel();
+        return;
     }
+
+    qint64 nCopySize = fromFile.size();
+    QProgressDialog progress("Copie " + Fs.fileName(), "Annuler la copie", 0, nCopySize, this);
+    progress.setWindowModality(Qt::WindowModal);
+
+    for (qint64 i = 1; i < nCopySize; i = i+1024) {
+        toFile.write(fromFile.read(i)); // write a byte
+        fromFile.seek(i);  // move to next byte to read
+        toFile.seek(i); // move to next byte to write
+
+        progress.setValue(i);
+
+        if (progress.wasCanceled())
+        {
+
+            Populate(Fs.fileName(), "SFTP", "Annuler");
+            FailCp = true;
+            break;
+        }
+    }
+    progress.setValue(nCopySize);
+    if (!FailCp)
+            Populate(Fs.fileName(), "SFTP", "copié");
+
+//    if (FileCopy->copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
+//        Populate(Fs.fileName(), "SFTP", "copié");
+//    }else{
+//        Populate(Fs.fileName(), "SFTP", "Echec de copie");
+//    }
     ui->textEdit->setTextColor(Qt::black);
 }
 
