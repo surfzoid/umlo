@@ -63,7 +63,9 @@ Umlo::Umlo(QWidget *parent)
     futureWatcher->setFuture(future);
     connect(this, &Umlo::computationProgress, this, &Umlo::setProgress, Qt::QueuedConnection);
 
-    FindLocalRpm(RpmbuildPath);
+
+    future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
+//    FindLocalRpm(RpmbuildPath);
     //    FindLocalRpm(MloMount);
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
@@ -295,7 +297,8 @@ void Umlo::on_actionRafraichir_triggered()
     ui->CmbxRpmList->clear();
 //    ui->textEdit->clear();
     clearitems();
-    FindLocalRpm(RpmbuildPath);
+
+    future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
     //    FindLocalRpm(MloMount);
 }
 
