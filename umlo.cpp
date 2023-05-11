@@ -335,8 +335,8 @@ void Umlo::UploadRpm(QFileInfo Fs)
     QFile toFile(DestDir + Fs.fileName());
 
 
-    qint64 toFileSize = fromFile.size();
-    if (toFileSize > 0) {
+    bool toFileexists = toFile.exists();
+    if (toFileexists) {
         ui->textEdit->setTextColor(Qt::red);
         ui->textEdit->append(tr("Le fichier ") + Fs.fileName() + tr(" existe deja sur le serveur."));
         ui->textEdit->setTextColor(Qt::black);
