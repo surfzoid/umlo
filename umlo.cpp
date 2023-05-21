@@ -408,7 +408,6 @@ void Umlo::on_actionRetour_a_la_line_triggered(bool checked)
 
 void Umlo::on_actionA_propos_triggered()
 {
-
     About *Abt = new About();
     Abt->show();
 }
@@ -511,4 +510,9 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
 ui->TableWRpm->scrollToBottom();
     return;
 
+}
+
+void Umlo::on_actionQT_infos_triggered()
+{
+    QApplication::aboutQt();
 }

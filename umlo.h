@@ -59,6 +59,8 @@ private slots:
     void on_TextFilter_textChanged(const QString &arg1);
 
 
+    void on_actionQT_infos_triggered();
+
 public slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void processreadyReadStandardOutput();

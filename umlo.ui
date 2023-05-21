@@ -453,6 +453,7 @@
      <string>Aide</string>
     </property>
     <addaction name="actionA_propos"/>
+    <addaction name="actionQT_infos"/>
    </widget>
    <widget class="QMenu" name="menuAffichage">
     <property name="title">
@@ -490,6 +491,11 @@
    </property>
    <property name="text">
     <string>Retour a la line</string>
+   </property>
+  </action>
+  <action name="actionQT_infos">
+   <property name="text">
+    <string>QT infos</string>
    </property>
   </action>
  </widget>
