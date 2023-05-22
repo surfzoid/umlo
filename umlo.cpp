@@ -345,7 +345,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
     }
 
     qint64 nCopySize = fromFile.size();
-    QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number( nCopySize/1024) + " MB", "Annuler la copie", 0,nCopySize, this);
+    QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number( nCopySize/1024/1024) + " MB", "Annuler la copie", 0,nCopySize, this);
     progress.setWindowModality(Qt::WindowModal);
 
     fromFile.open(QIODevice::ReadOnly);
