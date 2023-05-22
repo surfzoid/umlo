@@ -311,9 +311,9 @@ void Umlo::on_BtnSend_released()
         return;
     }
     UpCase=1;
-    //    FindLocalRpm(RpmbuildPath);
+        FindLocalRpm(RpmbuildPath);
     //FindLocalRpm(MloMount);
-    future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
+    //future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
 }
 
@@ -350,7 +350,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
 
     fromFile.open(QIODevice::ReadOnly);
     toFile.open(QIODevice::WriteOnly);
-    for (qint64 i = 1; i < nCopySize; i = i+1024) {
+    for (qint64 i = 1; i < nCopySize; i = i+2048) {
         toFile.write(fromFile.read(i)); // write a byte
         fromFile.seek(i);  // move to next byte to read
         toFile.seek(i); // move to next byte to write
