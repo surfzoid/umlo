@@ -354,7 +354,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
         toFile.write(fromFile.read(i)); // write a byte
         fromFile.seek(i);  // move to next byte to read
         toFile.seek(i); // move to next byte to write
-
+        toFile.setPermissions(fromFile.permissions());
         progress.setValue(i);
 
         if (progress.wasCanceled())
