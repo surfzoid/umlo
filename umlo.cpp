@@ -348,6 +348,8 @@ void Umlo::UploadRpm(QFileInfo Fs)
     QProgressDialog progress("Copie " + Fs.fileName(), "Annuler la copie", 0, nCopySize, this);
     progress.setWindowModality(Qt::WindowModal);
 
+    fromFile.open(QIODevice::ReadOnly);
+    toFile.open(QIODevice::WriteOnly);
     for (qint64 i = 1; i < nCopySize; i = i+1024) {
         toFile.write(fromFile.read(i)); // write a byte
         fromFile.seek(i);  // move to next byte to read
@@ -366,6 +368,9 @@ void Umlo::UploadRpm(QFileInfo Fs)
     progress.setValue(nCopySize);
     if (!FailCp)
             Populate(Fs.fileName(), "SFTP", "copié");
+
+    fromFile.close();
+    toFile.close();
 
 //    if (FileCopy->copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
 //        Populate(Fs.fileName(), "SFTP", "copié");
