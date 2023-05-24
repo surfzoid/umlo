@@ -1,11 +1,11 @@
 Name:           umlo
 Summary:        umlo for French MLO Repository
-Version:        1.0.4
+Version:        1.0.5
 
 %if 0%{?mageia}
-Release:        %mkrel 3
+Release:        %mkrel 1
 %else
-Release:        3.surf.mlo
+Release:        1.surf.mlo
 %endif
 
 License:        GPLv3
@@ -69,6 +69,9 @@ chmod -R ug+rw %{_srcrpmdir}
 %{_datadir}/umlo/translations/umlo_fr_FR.qm
 
 %changelog
+* Wed May 24 2023 surfzoid@gmail.com
++ Best perf.
+
 * Wed May 10 2023 surfzoid@gmail.com
 + Ask to conect manualy.
 + Refresh dir before scan.

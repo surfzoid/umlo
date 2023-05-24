@@ -350,13 +350,16 @@ void Umlo::UploadRpm(QFileInfo Fs)
 
     fromFile.open(QIODevice::ReadOnly);
     toFile.open(QIODevice::WriteOnly);
-    for (qint64 i = 1; i < nCopySize; i = i+1024*1024) {
+    for (qint64 i = 1; i < nCopySize; i = i+1048576) {
+//return -1 if copy error, need to manae that
         toFile.write(fromFile.read(i)); // write a byte
         fromFile.seek(i);  // move to next byte to read
         toFile.seek(i); // move to next byte to write
         toFile.setPermissions(fromFile.permissions());
         progress.setValue(i);
 
+        toFile.flush();
+//fromFile.commitTransaction();
         if (progress.wasCanceled())
         {
 
