@@ -348,7 +348,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
     int BuffCpy = 1048576;
     int SizeMB = nCopySize;
     if (nCopySize<BuffCpy) {
-        BuffCpy=nCopySize/2;
+        BuffCpy=1024;
     }else {
         SizeMB = nCopySize/1024/1024;
     }
