@@ -66,7 +66,7 @@ Umlo::Umlo(QWidget *parent)
 
 
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
-//    FindLocalRpm(RpmbuildPath);
+    //    FindLocalRpm(RpmbuildPath);
     //    FindLocalRpm(MloMount);
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
@@ -296,7 +296,7 @@ void Umlo::on_actionRafraichir_triggered()
 {
     UpCase=0;
     ui->CmbxRpmList->clear();
-//    ui->textEdit->clear();
+    //    ui->textEdit->clear();
     clearitems();
 
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
@@ -311,7 +311,7 @@ void Umlo::on_BtnSend_released()
         return;
     }
     UpCase=1;
-        FindLocalRpm(RpmbuildPath);
+    FindLocalRpm(RpmbuildPath);
     //FindLocalRpm(MloMount);
     //future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
@@ -345,21 +345,29 @@ void Umlo::UploadRpm(QFileInfo Fs)
     }
 
     qint64 nCopySize = fromFile.size();
-    QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number( nCopySize/1024/1024) + " MB", "Annuler la copie", 0,nCopySize, this);
+    int BuffCpy = 1048576;
+    int SizeMB = nCopySize;
+    if (nCopySize<BuffCpy) {
+        BuffCpy=nCopySize/2;
+    }else {
+        SizeMB = nCopySize/1024/1024;
+    }
+
+    QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number(SizeMB ) + " MB", "Annuler la copie", 0,nCopySize, this);
     progress.setWindowModality(Qt::WindowModal);
 
     fromFile.open(QIODevice::ReadOnly);
     toFile.open(QIODevice::WriteOnly);
-    for (qint64 i = 1; i < nCopySize; i = i+1048576) {
-//return -1 if copy error, need to manae that
+    for (qint64 i = 1; i < nCopySize; i = i+BuffCpy) {
+        //return -1 if copy error, need to manae that
         toFile.write(fromFile.read(i)); // write a byte
         fromFile.seek(i);  // move to next byte to read
         toFile.seek(i); // move to next byte to write
         toFile.setPermissions(fromFile.permissions());
         progress.setValue(i);
 
-        toFile.flush();
-//fromFile.commitTransaction();
+//        toFile.flush();
+        //fromFile.commitTransaction();
         if (progress.wasCanceled())
         {
 
@@ -370,22 +378,22 @@ void Umlo::UploadRpm(QFileInfo Fs)
     }
     progress.setValue(nCopySize);
     if (!FailCp)
-            Populate(Fs.fileName(), "SFTP", "copié");
+        Populate(Fs.fileName(), "SFTP", "copié");
 
     fromFile.close();
     toFile.close();
 
-//    if (FileCopy->copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
-//        Populate(Fs.fileName(), "SFTP", "copié");
-//    }else{
-//        Populate(Fs.fileName(), "SFTP", "Echec de copie");
-//    }
+    //    if (FileCopy->copy(Fs.absoluteFilePath(), DestDir + Fs.fileName())) {
+    //        Populate(Fs.fileName(), "SFTP", "copié");
+    //    }else{
+    //        Populate(Fs.fileName(), "SFTP", "Echec de copie");
+    //    }
     ui->textEdit->setTextColor(Qt::black);
 }
 
 void Umlo::on_BtnClearTxt_released()
 {
-//    ui->textEdit->clear();
+    //    ui->textEdit->clear();
     clearitems();
 }
 
@@ -515,7 +523,7 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
 
     ui->TableWRpm->setVerticalHeaderItem(row,item);
 
-ui->TableWRpm->scrollToBottom();
+    ui->TableWRpm->scrollToBottom();
     return;
 
 }
