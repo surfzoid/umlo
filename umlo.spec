@@ -3,9 +3,9 @@ Summary:        umlo for French MLO Repository
 Version:        1.0.5
 
 %if 0%{?mageia}
-Release:        %mkrel 1
+Release:        %mkrel 2
 %else
-Release:        1.surf.mlo
+Release:        2.surf.mlo
 %endif
 
 License:        GPLv3

@@ -345,15 +345,12 @@ void Umlo::UploadRpm(QFileInfo Fs)
     }
 
     qint64 nCopySize = fromFile.size();
-    int BuffCpy = 1048576;
-    int SizeMB = nCopySize;
-    if (nCopySize<BuffCpy) {
+    qint64 BuffCpy = 1048576;
+    qint64 SizeMB = nCopySize/1024/1024;
+    if (nCopySize<BuffCpy)
         BuffCpy=1024;
-    }else {
-        SizeMB = nCopySize/1024/1024;
-    }
 
-    QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number(SizeMB ) + " MB", "Annuler la copie", 0,nCopySize, this);
+    QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number(SizeMB ,10) + " MB", "Annuler la copie", 0,nCopySize, this);
     progress.setWindowModality(Qt::WindowModal);
 
     fromFile.open(QIODevice::ReadOnly);
@@ -363,7 +360,6 @@ void Umlo::UploadRpm(QFileInfo Fs)
         toFile.write(fromFile.read(i)); // write a byte
         fromFile.seek(i);  // move to next byte to read
         toFile.seek(i); // move to next byte to write
-        toFile.setPermissions(fromFile.permissions());
         progress.setValue(i);
 
 //        toFile.flush();
@@ -376,6 +372,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
             break;
         }
     }
+    toFile.setPermissions(fromFile.permissions());
     progress.setValue(nCopySize);
     if (!FailCp)
         Populate(Fs.fileName(), "SFTP", "copié");
