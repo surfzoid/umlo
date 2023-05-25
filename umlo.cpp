@@ -254,11 +254,13 @@ void Umlo::FindLocalRpm(QDir dir)
     QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo fi, fil )
     {
-        QStringList RName = fi.fileName().split("-");
+//        QStringList RName = fi.fileName().split("-");
         QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
         int Last = RpmVers.length();
         QString Rel = RpmVers.at(Last - 1);
         QString VersRel = RpmVers.at(Last - 2) + "-" + Rel.remove(1,1);
+        QString FindRName = fi.fileName().split(VersRel).at(0);
+        QString RName = FindRName.left(FindRName.length() - 1);
         switch(UpCase) {
         case 0:
             if (ui->textEdit->textColor() == Qt::black) {
@@ -268,18 +270,18 @@ void Umlo::FindLocalRpm(QDir dir)
             }
 
             Populate(fi.fileName(), "Local", "Aucun");
-            if (ui->CmbxRpmList->findText(RName.at(0)) == -1)
+            if (ui->CmbxRpmList->findText(RName) == -1)
             {
-                ui->CmbxRpmList->addItem(RName.at(0));
+                ui->CmbxRpmList->addItem(RName);
                 if (ui->CmbxRpmVers->count() == 0)
-                    on_CmbxRpmList_textActivated(RName.at(0));
+                    on_CmbxRpmList_textActivated(RName);
                 ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
                 ui->CmbxRpmList->setCurrentIndex(0);
             }
             break;
 
         case 1:
-            if (RName.at(0) == ui->CmbxRpmList->currentText() and VersRel == ui->CmbxRpmVers->currentText() )
+            if (RName == ui->CmbxRpmList->currentText() and VersRel == ui->CmbxRpmVers->currentText() )
                 UploadRpm(fi);
             break;
         default:
@@ -295,6 +297,7 @@ void Umlo::FindLocalRpm(QDir dir)
 void Umlo::on_actionRafraichir_triggered()
 {
     UpCase=0;
+    ui->CmbxRpmVers->clear();
     ui->CmbxRpmList->clear();
     //    ui->textEdit->clear();
     clearitems();
