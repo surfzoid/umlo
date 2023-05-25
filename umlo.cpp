@@ -254,13 +254,13 @@ void Umlo::FindLocalRpm(QDir dir)
     QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
     foreach ( QFileInfo fi, fil )
     {
-//        QStringList RName = fi.fileName().split("-");
+        //        QStringList RName = fi.fileName().split("-");
         QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
         int Last = RpmVers.length();
         QString Rel = RpmVers.at(Last - 1);
         QString VersRel = RpmVers.at(Last - 2) + "-" + Rel.remove(1,1);
         QString RName = fi.fileName().split("-").at(0);
-//        QString RName = FindRName.left(FindRName.length() - 1);
+        //        QString RName = FindRName.left(FindRName.length() - 1);
         switch(UpCase) {
         case 0:
             if (ui->textEdit->textColor() == Qt::black) {
@@ -359,13 +359,17 @@ void Umlo::UploadRpm(QFileInfo Fs)
     fromFile.open(QIODevice::ReadOnly);
     toFile.open(QIODevice::WriteOnly);
     for (qint64 i = 1; i < nCopySize; i = i+BuffCpy) {
-        //return -1 if copy error, need to manae that
-        toFile.write(fromFile.read(i)); // write a byte
-        fromFile.seek(i);  // move to next byte to read
-        toFile.seek(i); // move to next byte to write
+        if (!toFile.write(fromFile.read(BuffCpy))) {
+            ui->textEdit->append(tr("Erreur pendand l'écriture"));
+            break;
+        }
+
+        fromFile.seek(i+BuffCpy - 1);  // move to next  read
+        toFile.seek(i+BuffCpy - 1); // move to next  write
+        //        ui->textEdit->append(QString::number(fromFile.pos()));
         progress.setValue(i);
 
-//        toFile.flush();
+        //        toFile.flush();
         //fromFile.commitTransaction();
         if (progress.wasCanceled())
         {
