@@ -16,6 +16,7 @@ jobs:
 
       - name: Need qmake and QT
         run: | 
+            sudo apt-get update
             sudo apt install -y qtbase5-dev qt5-qmake qtchooser qtbase5-dev-tools
 
       - name: qmake
