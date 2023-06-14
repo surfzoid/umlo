@@ -47,7 +47,7 @@ Umlo::Umlo(QWidget *parent)
 
     Umlo::UserName = settings.value("UserName", Umlo::UserName).value<QString>();
     Umlo::UserPass = Umlo::crypto.decryptToString(settings.value("Password", "hik12345").value<QString>());
-    Umlo::PrefixUser = settings.value("PrefixUser", Umlo::PrefixUser).value<QString>();
+    Umlo::PrefixUser = "." + settings.value("PrefixUser", Umlo::PrefixUser).value<QString>() + ".";
     Umlo::RpmbuildPath = settings.value("RpmbuildPath", Umlo::RpmbuildPath).value<QString>();
     Umlo::MloMount = settings.value("MloMount", Umlo::MloMount).value<QString>();
 
@@ -235,7 +235,7 @@ void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
         QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
         int Last = RpmVers.length();
         QString Rel = RpmVers.at(Last - 1);
-        QString VersRel = RpmVers.at(Last - 2) + "-" + Rel.remove(1,1);
+        QString VersRel = RpmVers.at(Last - 2) + "-" + Rel;
         if (ui->CmbxRpmVers->findText(VersRel) == -1)
             ui->CmbxRpmVers->addItem(VersRel);
     }
@@ -258,7 +258,7 @@ void Umlo::FindLocalRpm(QDir dir)
         QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
         int Last = RpmVers.length();
         QString Rel = RpmVers.at(Last - 1);
-        QString VersRel = RpmVers.at(Last - 2) + "-" + Rel.remove(1,1);
+        QString VersRel = RpmVers.at(Last - 2) + "-" + Rel;
         QString RName = fi.fileName().split("-").at(0);
         //        QString RName = FindRName.left(FindRName.length() - 1);
         switch(UpCase) {
@@ -323,7 +323,7 @@ void Umlo::on_BtnSend_released()
 void Umlo::UploadRpm(QFileInfo Fs)
 {
     ui->textEdit->append("Envoi de " + Fs.fileName());
-    QString MloVers = Fs.fileName().split(PrefixUser).at(1).split(".").at(1);
+    QString MloVers = Fs.fileName().split(PrefixUser).at(1).split(".").at(0);
     QString MloVersDir = MloVers.right(1);
     QString Arch = Fs.fileName().split(MloVers).at(1).split(".").at(1);
     QString DestDir;
@@ -470,7 +470,7 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
     ui->TableWRpm->horizontalHeader()->sortIndicatorOrder();
 
     QString RpmName = fileName.split(PrefixUser).at(0);
-    RpmName = RpmName.remove(RpmName.length() - 1,1);
+    //RpmName = RpmName.remove(RpmName.length() - 1,1);
     QString MloVers = fileName.split(PrefixUser).at(1).split(".").at(1);
     QStringList ArchType = fileName.split(MloVers).at(1).split(".");
     QString Arch = ArchType.at(1);
