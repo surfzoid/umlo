@@ -84,7 +84,7 @@ Umlo::~Umlo()
     SftpProc->startDetached("umount", QStringList() << MountDir->path());
     delete ui;
 }
-
+QString CmdLine;
 void Umlo::Init()
 {
     if (!MountDir->exists()) {
@@ -102,9 +102,10 @@ void Umlo::Init()
         //        SftpProc->start("sshfs", QStringList() << "--help");
 
         if (UserPass == "") {
-            SftpProc->start("sshfs", QStringList() << UserName + "@repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C");
+            SftpProc->start("sshfs", QStringList() << UserName + "@repository.mageialinux-online.org:/team-mlo/public_html/www" << MountDir->path() << "-p" << "2222" << "-C");
+             CmdLine = SftpProc->program();
         }else{
-            SftpProc->start("SSHPASS=\"" + UserPass + "\"", QStringList() << "sshfs" << "repository.mageialinux-online.org:" << MountDir->path() << "-p" << "2222" << "-C" << "-o" << "ssh_command=\"sshpass" << "-e" << "ssh" << "-l" << UserName + "\"");
+            SftpProc->start("SSHPASS=\"" + UserPass + "\"", QStringList() << "sshfs" << "repository.mageialinux-online.org:/team-mlo/public_html/www" << MountDir->path() << "-p" << "2222" << "-C" << "-o" << "ssh_command=\"sshpass" << "-e" << "ssh" << "-l" << UserName + "\"");
         }
     }else{
         ui->StatuLbl->setText("Connection ok");
@@ -471,7 +472,7 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
 
     QString RpmName = fileName.split(PrefixUser).at(0);
     //RpmName = RpmName.remove(RpmName.length() - 1,1);
-    QString MloVers = fileName.split(PrefixUser).at(1).split(".").at(1);
+    QString MloVers = fileName.split(PrefixUser).at(1).split(".").at(0);
     QStringList ArchType = fileName.split(MloVers).at(1).split(".");
     QString Arch = ArchType.at(1);
     QString TypeRpm = "rpm";
