@@ -82,8 +82,8 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>166</width>
-      <height>42</height>
+      <width>117</width>
+      <height>32</height>
      </rect>
     </property>
     <property name="maxVisibleItems">
@@ -111,8 +111,8 @@
      <rect>
       <x>310</x>
       <y>10</y>
-      <width>166</width>
-      <height>42</height>
+      <width>117</width>
+      <height>32</height>
      </rect>
     </property>
     <property name="maxVisibleItems">
@@ -432,6 +432,19 @@
      </property>
     </column>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>20</y>
+      <width>61</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filtre</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -439,7 +452,7 @@
      <x>0</x>
      <y>0</y>
      <width>1227</width>
-     <height>34</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">

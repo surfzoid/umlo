@@ -2,10 +2,13 @@ Name:           umlo
 Summary:        umlo for French MLO Repository
 Version:        1.0.6
 
+%global Rel 3
 %if 0%{?mageia}
-Release:        %mkrel 2
+Release:        %mkrel %{Rel}
+%elif 0%{?fedora} > 36 || 0%{?rhel} > 6
+Release:        %{Rel}.surf%{?dist}
 %else
-Release:        2.surf.mlo
+Release:        %{Rel}.surf.mlo
 %endif
 
 License:        GPLv3
