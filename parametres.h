@@ -21,6 +21,10 @@ private slots:
 
     void on_BtnCancel_released();
 
+    void on_BtnRpmbuilDirChoice_released();
+
+    void on_BtnSshDirChoice_released();
+
 private:
     Ui::Parametres *ui;
     QSettings settings;

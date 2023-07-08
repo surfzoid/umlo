@@ -1,6 +1,6 @@
 Name:           umlo
 Summary:        umlo for French MLO Repository
-Version:        1.0.6
+Version:        1.0.7
 
 %global Rel 3
 %if 0%{?mageia}

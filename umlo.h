@@ -64,6 +64,7 @@ private slots:
 public slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void processreadyReadStandardOutput();
+    void taskCompleted();
 
 private:
     Ui::Umlo *ui;
@@ -81,12 +82,15 @@ private:
     void UploadRpm(QFileInfo Fs);
     void clearitems();
     void Populate(QString fileName, QString Whereis, QString Statu);
+    QFutureWatcher<void>  *futureWatcher;
+    bool LocalRpmEnd = false;
 
 signals:
     void computationProgress( QFileInfo FsName);
 
 protected:
     //void closeEvent(QCloseEvent *event) override;
+
 
 };
 #endif // UMLO_H

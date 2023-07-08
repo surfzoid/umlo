@@ -58,19 +58,21 @@ Umlo::Umlo(QWidget *parent)
 
     MountDir = new QDir(MloMount);
 
-    auto futureWatcher = new QFutureWatcher<void>(this);
-    connect(futureWatcher, &QFutureWatcher<void>::finished, futureWatcher, &QFutureWatcher<void>::deleteLater);
+    futureWatcher = new QFutureWatcher<void>(this);
+//    connect(futureWatcher, &QFutureWatcher<void>::finished, futureWatcher, &QFutureWatcher<void>::deleteLater);
+//    connect( futureWatcher, &QFutureWatcher<void>::finished, this,  Umlo::taskCompleted() ) ;
+    connect(futureWatcher, &QFutureWatcher<void>::finished, this, &Umlo::taskCompleted);
 
     futureWatcher->setFuture(future);
+
     connect(this, &Umlo::computationProgress, this, &Umlo::setProgress, Qt::QueuedConnection);
 
-
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
-    //    FindLocalRpm(RpmbuildPath);
-    //    FindLocalRpm(MloMount);
+
+    ui->StatuLbl->setText("Listage des rpms Locaux");
+    ui->textEdit->append("Liste des RPMS depuis rpmbild/SRPMS");
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
-
 
     QSizeGrip * sizeGrip = new QSizeGrip(ui->TableWRpm);
 
@@ -84,6 +86,13 @@ Umlo::~Umlo()
     SftpProc->startDetached("umount", QStringList() << MountDir->path());
     delete ui;
 }
+
+
+void Umlo::taskCompleted()
+{
+//int ret = QMessageBox::warning(this,tr("test "),tr("test"),QMessageBox::Ok | QMessageBox::Cancel);
+}
+
 QString CmdLine;
 void Umlo::Init()
 {
@@ -224,7 +233,12 @@ void Umlo::on_CmbxRpmList_textActivated(const QString &arg1)
     ui->CmbxRpmVers->clear();
     QDir dir(RpmbuildPath);
     dir.refresh();
-    FindLocalRpmVers(dir, arg1);
+
+    if (LocalRpmEnd) {
+        //    FindLocalRpmVers(dir, arg1);
+        future = QtConcurrent::run(this, &Umlo::FindLocalRpmVers, RpmbuildPath, arg1);
+    }
+
     //    FindLocalRpmVers(MloMount, arg1);
 }
 
@@ -253,8 +267,10 @@ void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
 void Umlo::FindLocalRpm(QDir dir)
 {
     QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
-    foreach ( QFileInfo fi, fil )
+    for (int i = 0; i < fil.length(); i++ )
+//    foreach ( QFileInfo fi, fil )
     {
+        QFileInfo fi( fil.at(i) );
         //        QStringList RName = fi.fileName().split("-");
         QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
         int Last = RpmVers.length();
@@ -264,6 +280,7 @@ void Umlo::FindLocalRpm(QDir dir)
         //        QString RName = FindRName.left(FindRName.length() - 1);
         switch(UpCase) {
         case 0:
+            LocalRpmEnd = false;
             if (ui->textEdit->textColor() == Qt::black) {
                 ui->textEdit->setTextColor(Qt::blue);
             }else{
@@ -279,6 +296,14 @@ void Umlo::FindLocalRpm(QDir dir)
                 ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
                 ui->CmbxRpmList->setCurrentIndex(0);
             }
+
+            if (i == fil.length() - 1 and ui->CmbxRpmList->count() > 0) {
+                LocalRpmEnd = true;
+                ui->CmbxRpmVers->clear();
+                FindLocalRpmVers(dir, ui->CmbxRpmList->itemText(0));
+
+                ui->StatuLbl->setText("Fin du listage des rpms Locaux");
+            }
             break;
 
         case 1:
@@ -289,6 +314,7 @@ void Umlo::FindLocalRpm(QDir dir)
             UpCase=-1;
             break;
         };
+
     }
 
     QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );

@@ -52,6 +52,9 @@
       <height>40</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Se connecter au serveur MLO et faire un montage SFTP</string>
+    </property>
     <property name="text">
      <string>Connection</string>
     </property>
@@ -86,6 +89,9 @@
       <height>32</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Liste des rpms locaux</string>
+    </property>
     <property name="maxVisibleItems">
      <number>50</number>
     </property>
@@ -102,6 +108,9 @@
       <height>40</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Suprime toutes les versions du rpm local sur le serveur</string>
+    </property>
     <property name="text">
      <string>Suprimer</string>
     </property>
@@ -114,6 +123,9 @@
       <width>117</width>
       <height>32</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Version des rpms locaux</string>
     </property>
     <property name="maxVisibleItems">
      <number>50</number>
@@ -130,6 +142,9 @@
       <width>141</width>
       <height>40</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Envoie tout les rpms sur le serveur</string>
     </property>
     <property name="text">
      <string>Envoi</string>
@@ -188,7 +203,7 @@
      </font>
     </property>
     <property name="toolTip">
-     <string>Efface le journal</string>
+     <string>Vide la liste</string>
     </property>
     <property name="text">
      <string>X</string>
@@ -351,6 +366,9 @@
       <height>36</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Filtre l'affichage dans la liste</string>
+    </property>
    </widget>
    <widget class="QTableWidget" name="TableWRpm">
     <property name="geometry">
@@ -493,6 +511,15 @@
   <action name="actionRafraichir">
    <property name="text">
     <string>Rafraichir</string>
+   </property>
+   <property name="toolTip">
+    <string>Rafraichir</string>
+   </property>
+   <property name="statusTip">
+    <string/>
+   </property>
+   <property name="whatsThis">
+    <string>Rafraichir la liste des rpm locaux, cliquer sur connection pour rafraichir les rpms distant</string>
    </property>
   </action>
   <action name="actionRetour_a_la_line">

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>826</width>
+    <width>911</width>
     <height>384</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>10</y>
       <width>811</width>
-      <height>212</height>
+      <height>211</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -38,6 +38,43 @@
        </property>
        <property name="text">
         <string>surfzoid</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Passphrase</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="PassEd">
+       <property name="toolTip">
+        <string>Enter the user password</string>
+       </property>
+       <property name="text">
+        <string>pass</string>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::PasswordEchoOnEdit</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Prefixe utilisateur</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="PrefixUserEd">
+       <property name="toolTip">
+        <string>Enter the user name</string>
+       </property>
+       <property name="text">
+        <string>surf</string>
        </property>
       </widget>
      </item>
@@ -78,43 +115,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Prefixe utilisateur</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="PrefixUserEd">
-       <property name="toolTip">
-        <string>Enter the user name</string>
-       </property>
-       <property name="text">
-        <string>surf</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Passphrase</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="PassEd">
-       <property name="toolTip">
-        <string>Enter the user password</string>
-       </property>
-       <property name="text">
-        <string>pass</string>
-       </property>
-       <property name="echoMode">
-        <enum>QLineEdit::PasswordEchoOnEdit</enum>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
@@ -149,14 +149,40 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="BtnRpmbuilDirChoice">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>120</y>
+      <width>41</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BtnSshDirChoice">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>160</y>
+      <width>41</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>826</width>
-     <height>34</height>
+     <width>911</width>
+     <height>29</height>
     </rect>
    </property>
   </widget>

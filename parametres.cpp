@@ -1,6 +1,7 @@
 #include "parametres.h"
 #include "ui_parametres.h"
 #include "umlo.h"
+#include <QFileDialog>
 
 Parametres::Parametres(QWidget *parent) :
     QMainWindow(parent),
@@ -57,4 +58,24 @@ void Parametres::on_BtnSave_released()
 void Parametres::on_BtnCancel_released()
 {
     close();
+}
+
+void Parametres::on_BtnRpmbuilDirChoice_released()
+{
+    QUrl _IntputFolder = QFileDialog::getExistingDirectory(this,
+                                                           (tr("Choisir un dossier rpmbuild")), ui->RpmbuildEd->text());
+
+    if (_IntputFolder.isEmpty() == false) {
+        ui->RpmbuildEd->setText(_IntputFolder.path().toUtf8());
+    }
+}
+
+void Parametres::on_BtnSshDirChoice_released()
+{
+    QUrl _IntputFolder = QFileDialog::getExistingDirectory(this,
+                                                           (tr("Choisir un dossier de montage ssh/sftp")), ui->RootEd->text());
+
+    if (_IntputFolder.isEmpty() == false) {
+        ui->RootEd->setText(_IntputFolder.path().toUtf8());
+    }
 }
