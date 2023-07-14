@@ -24,7 +24,7 @@ public:
     static QString UserName;
     static QString UserPass;
     static QString PrefixUser;
-    static QString RpmbuildPath;
+    static QStringList RpmbuildPath;
     static QString MloMount;
     void Init();
 
@@ -77,8 +77,8 @@ private:
     int PrCase = 0;
     int UpCase = 0;
     QFileInfoList RpmList;
-    void FindLocalRpmVers(QDir dir, QString LocalRpm);
-    void FindLocalRpm(QDir dir);
+    void FindLocalRpmVers(QStringList dir, QString LocalRpm);
+    void FindLocalRpm(QStringList dir);
     void UploadRpm(QFileInfo Fs);
     void clearitems();
     void Populate(QString fileName, QString Whereis, QString Statu);

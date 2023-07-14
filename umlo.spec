@@ -1,6 +1,6 @@
 Name:           umlo
 Summary:        umlo for French MLO Repository
-Version:        1.0.7
+Version:        1.0.8
 
 %global Rel 3
 %if 0%{?mageia}
@@ -72,6 +72,9 @@ chmod -R ug+rw %{_srcrpmdir}
 %{_datadir}/umlo/translations/umlo_fr_FR.qm
 
 %changelog
+* Sat Jul 14 2023 surfzoid@gmail.com
++ manage multiple build directory.
+
 * Wed Jun 14 2023 surfzoid@gmail.com
 + Avoid conflict between user prefix and rpm name.
 

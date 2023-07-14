@@ -16,7 +16,7 @@
 QString Umlo::UserName = "Ex:surfzoid";
 QString Umlo::UserPass = "hik12345";
 QString Umlo::PrefixUser = "surf";
-QString Umlo::RpmbuildPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild";
+QStringList Umlo::RpmbuildPath; /*= QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild";*/
 QString Umlo::MloMount = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/";
 
 SimpleCrypt Umlo::crypto;
@@ -48,7 +48,7 @@ Umlo::Umlo(QWidget *parent)
     Umlo::UserName = settings.value("UserName", Umlo::UserName).value<QString>();
     Umlo::UserPass = Umlo::crypto.decryptToString(settings.value("Password", "hik12345").value<QString>());
     Umlo::PrefixUser = "." + settings.value("PrefixUser", Umlo::PrefixUser).value<QString>() + ".";
-    Umlo::RpmbuildPath = settings.value("RpmbuildPath", Umlo::RpmbuildPath).value<QString>();
+    Umlo::RpmbuildPath = settings.value("RpmbuildPath", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/rpmbuild").value<QString>().split(";");
     Umlo::MloMount = settings.value("MloMount", Umlo::MloMount).value<QString>();
 
     settings.endGroup();
@@ -59,8 +59,8 @@ Umlo::Umlo(QWidget *parent)
     MountDir = new QDir(MloMount);
 
     futureWatcher = new QFutureWatcher<void>(this);
-//    connect(futureWatcher, &QFutureWatcher<void>::finished, futureWatcher, &QFutureWatcher<void>::deleteLater);
-//    connect( futureWatcher, &QFutureWatcher<void>::finished, this,  Umlo::taskCompleted() ) ;
+    //    connect(futureWatcher, &QFutureWatcher<void>::finished, futureWatcher, &QFutureWatcher<void>::deleteLater);
+    //    connect( futureWatcher, &QFutureWatcher<void>::finished, this,  Umlo::taskCompleted() ) ;
     connect(futureWatcher, &QFutureWatcher<void>::finished, this, &Umlo::taskCompleted);
 
     futureWatcher->setFuture(future);
@@ -70,7 +70,7 @@ Umlo::Umlo(QWidget *parent)
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
     ui->StatuLbl->setText("Listage des rpms Locaux");
-    ui->textEdit->append("Liste des RPMS depuis rpmbild/SRPMS");
+    ui->textEdit->append("Liste des RPMS depuis SRPMS");
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
 
@@ -90,7 +90,7 @@ Umlo::~Umlo()
 
 void Umlo::taskCompleted()
 {
-//int ret = QMessageBox::warning(this,tr("test "),tr("test"),QMessageBox::Ok | QMessageBox::Cancel);
+    //int ret = QMessageBox::warning(this,tr("test "),tr("test"),QMessageBox::Ok | QMessageBox::Cancel);
 }
 
 QString CmdLine;
@@ -112,7 +112,7 @@ void Umlo::Init()
 
         if (UserPass == "") {
             SftpProc->start("sshfs", QStringList() << UserName + "@repository.mageialinux-online.org:/team-mlo/public_html/www" << MountDir->path() << "-p" << "2222" << "-C");
-             CmdLine = SftpProc->program();
+            CmdLine = SftpProc->program();
         }else{
             SftpProc->start("SSHPASS=\"" + UserPass + "\"", QStringList() << "sshfs" << "repository.mageialinux-online.org:/team-mlo/public_html/www" << MountDir->path() << "-p" << "2222" << "-C" << "-o" << "ssh_command=\"sshpass" << "-e" << "ssh" << "-l" << UserName + "\"");
         }
@@ -231,96 +231,106 @@ void Umlo::on_BtnDel_released()
 void Umlo::on_CmbxRpmList_textActivated(const QString &arg1)
 {
     ui->CmbxRpmVers->clear();
-    QDir dir(RpmbuildPath);
-    dir.refresh();
+
+    foreach (QString Path, RpmbuildPath) {
+        QDir dir(Path);
+        dir.refresh();
+    }
 
     if (LocalRpmEnd) {
-        //    FindLocalRpmVers(dir, arg1);
+
         future = QtConcurrent::run(this, &Umlo::FindLocalRpmVers, RpmbuildPath, arg1);
     }
 
     //    FindLocalRpmVers(MloMount, arg1);
 }
 
-void Umlo::FindLocalRpmVers(QDir dir, QString LocalRpm)
+void Umlo::FindLocalRpmVers(QStringList dirlist, QString LocalRpm)
 {
-    QFileInfoList fil = dir.entryInfoList( QStringList( LocalRpm + "*" + PrefixUser + "*" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
-    foreach ( QFileInfo fi, fil )
-    {
-        QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
-        int Last = RpmVers.length();
-        QString Rel = RpmVers.at(Last - 1);
-        QString VersRel = RpmVers.at(Last - 2) + "-" + Rel;
-        if (ui->CmbxRpmVers->findText(VersRel) == -1)
-            ui->CmbxRpmVers->addItem(VersRel);
+    foreach (QString Path, dirlist) {
+        QDir dir( Path);
+        QFileInfoList fil = dir.entryInfoList( QStringList( LocalRpm + "*" + PrefixUser + "*" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
+        foreach ( QFileInfo fi, fil )
+        {
+            QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
+            int Last = RpmVers.length();
+            QString Rel = RpmVers.at(Last - 1);
+            QString VersRel = RpmVers.at(Last - 2) + "-" + Rel;
+            if (ui->CmbxRpmVers->findText(VersRel) == -1)
+                ui->CmbxRpmVers->addItem(VersRel);
+        }
+
+        QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
+        foreach ( QFileInfo di, dil )
+            FindLocalRpmVers( QStringList( di.absoluteFilePath() ) , LocalRpm);
+
+        ui->CmbxRpmVers->model()->sort(0, Qt::DescendingOrder);
+        ui->CmbxRpmVers->setCurrentIndex(0);
     }
-
-    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
-    foreach ( QFileInfo di, dil )
-        FindLocalRpmVers( QDir( di.absoluteFilePath() ) , LocalRpm);
-
-    ui->CmbxRpmVers->model()->sort(0, Qt::DescendingOrder);
-    ui->CmbxRpmVers->setCurrentIndex(0);
 }
 
 
-void Umlo::FindLocalRpm(QDir dir)
+void Umlo::FindLocalRpm(QStringList dirlist)
 {
-    QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
-    for (int i = 0; i < fil.length(); i++ )
-//    foreach ( QFileInfo fi, fil )
-    {
-        QFileInfo fi( fil.at(i) );
-        //        QStringList RName = fi.fileName().split("-");
-        QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
-        int Last = RpmVers.length();
-        QString Rel = RpmVers.at(Last - 1);
-        QString VersRel = RpmVers.at(Last - 2) + "-" + Rel;
-        QString RName = fi.fileName().split("-").at(0);
-        //        QString RName = FindRName.left(FindRName.length() - 1);
-        switch(UpCase) {
-        case 0:
-            LocalRpmEnd = false;
-            if (ui->textEdit->textColor() == Qt::black) {
-                ui->textEdit->setTextColor(Qt::blue);
-            }else{
-                ui->textEdit->setTextColor(Qt::black);
-            }
+    foreach (QString Path, dirlist) {
+        QDir dir( Path);
+        QFileInfoList fil = dir.entryInfoList( QStringList( "*" + PrefixUser + "*rpm" ),QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
+        for (int i = 0; i < fil.length(); i++ )
+            //    foreach ( QFileInfo fi, fil )
+        {
+            QFileInfo fi( fil.at(i) );
+            //        QStringList RName = fi.fileName().split("-");
+            QStringList RpmVers = fi.fileName().split(PrefixUser).at(0).split("-");
+            int Last = RpmVers.length();
+            QString Rel = RpmVers.at(Last - 1);
+            QString VersRel = RpmVers.at(Last - 2) + "-" + Rel;
+            QString RName = fi.fileName().split("-").at(0);
+            //        QString RName = FindRName.left(FindRName.length() - 1);
+            switch(UpCase) {
+            case 0:
+                LocalRpmEnd = false;
+                if (ui->textEdit->textColor() == Qt::black) {
+                    ui->textEdit->setTextColor(Qt::blue);
+                }else{
+                    ui->textEdit->setTextColor(Qt::black);
+                }
 
-            Populate(fi.fileName(), "Local", "Aucun");
-            if (ui->CmbxRpmList->findText(RName) == -1)
-            {
-                ui->CmbxRpmList->addItem(RName);
-                if (ui->CmbxRpmVers->count() == 0)
-                    on_CmbxRpmList_textActivated(RName);
-                ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
-                ui->CmbxRpmList->setCurrentIndex(0);
-            }
+                Populate(fi.fileName(), "Local", "Aucun");
+                if (ui->CmbxRpmList->findText(RName) == -1)
+                {
+                    ui->CmbxRpmList->addItem(RName);
+                    if (ui->CmbxRpmVers->count() == 0)
+                        on_CmbxRpmList_textActivated(RName);
+                    ui->CmbxRpmList->model()->sort(0, Qt::AscendingOrder); // default Qt::AscendingOrder
+                    ui->CmbxRpmList->setCurrentIndex(0);
+                }
 
-            if (i == fil.length() - 1 and ui->CmbxRpmList->count() > 0) {
-                LocalRpmEnd = true;
-                ui->CmbxRpmVers->clear();
-                FindLocalRpmVers(dir, ui->CmbxRpmList->itemText(0));
+                if (i == fil.length() - 1 and ui->CmbxRpmList->count() > 0) {
+                    LocalRpmEnd = true;
+                    ui->CmbxRpmVers->clear();
+                    FindLocalRpmVers(dirlist, ui->CmbxRpmList->itemText(0));
 
-                ui->StatuLbl->setText("Fin du listage des rpms Locaux");
-            }
-            break;
+                    ui->StatuLbl->setText("Fin du listage des rpms Locaux");
+                }
+                break;
 
-        case 1:
-            if (RName == ui->CmbxRpmList->currentText() and VersRel == ui->CmbxRpmVers->currentText() )
-                UploadRpm(fi);
-            break;
-        default:
-            UpCase=-1;
-            break;
-        };
+            case 1:
+                if (RName == ui->CmbxRpmList->currentText() and VersRel == ui->CmbxRpmVers->currentText() )
+                    UploadRpm(fi);
+                break;
+            default:
+                UpCase=-1;
+                break;
+            };
 
+        }
+
+        QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
+        foreach ( QFileInfo di, dil )
+            FindLocalRpm( QStringList( di.absoluteFilePath() ) );
     }
-
-    QFileInfoList dil = dir.entryInfoList( QStringList( "*" ),QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,QDir::Name | QDir::IgnoreCase );
-    foreach ( QFileInfo di, dil )
-        FindLocalRpm( QDir( di.absoluteFilePath() ) );
 }
+
 void Umlo::on_actionRafraichir_triggered()
 {
     UpCase=0;
@@ -329,7 +339,7 @@ void Umlo::on_actionRafraichir_triggered()
     //    ui->textEdit->clear();
     clearitems();
 
-    future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
+        future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
     //    FindLocalRpm(MloMount);
 }
 
