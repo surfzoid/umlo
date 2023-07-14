@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1227</width>
+    <width>1410</width>
     <height>840</height>
    </rect>
   </property>
@@ -41,172 +41,6 @@
     </property>
     <property name="textInteractionFlags">
      <set>Qt::TextBrowserInteraction</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="BtnConect">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>151</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Se connecter au serveur MLO et faire un montage SFTP</string>
-    </property>
-    <property name="text">
-     <string>Connection</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../../../../../usr/share/icons/umlo.png</normaloff>../../../../../usr/share/icons/umlo.png</iconset>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="BtnDeConect">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>120</y>
-      <width>171</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Deconnection</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../../../../../usr/share/icons/umlo.png</normaloff>../../../../../usr/share/icons/umlo.png</iconset>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="CmbxRpmList">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>117</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Liste des rpms locaux</string>
-    </property>
-    <property name="maxVisibleItems">
-     <number>50</number>
-    </property>
-    <property name="sizeAdjustPolicy">
-     <enum>QComboBox::AdjustToContents</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="BtnDel">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>170</y>
-      <width>141</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Suprime toutes les versions du rpm local sur le serveur</string>
-    </property>
-    <property name="text">
-     <string>Suprimer</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="CmbxRpmVers">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>10</y>
-      <width>117</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Version des rpms locaux</string>
-    </property>
-    <property name="maxVisibleItems">
-     <number>50</number>
-    </property>
-    <property name="sizeAdjustPolicy">
-     <enum>QComboBox::AdjustToContents</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="BtnSend">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>220</y>
-      <width>141</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Envoie tout les rpms sur le serveur</string>
-    </property>
-    <property name="text">
-     <string>Envoi</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="BtnClearTxt">
-    <property name="geometry">
-     <rect>
-      <x>720</x>
-      <y>10</y>
-      <width>41</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>146</red>
-          <green>148</green>
-          <blue>149</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="toolTip">
-     <string>Vide la liste</string>
-    </property>
-    <property name="text">
-     <string>X</string>
     </property>
    </widget>
    <widget class="QPushButton" name="BtnZoomIn">
@@ -336,10 +170,10 @@
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>60</y>
-      <width>861</width>
-      <height>71</height>
+      <x>630</x>
+      <y>10</y>
+      <width>751</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
@@ -357,25 +191,12 @@
      <set>QTextEdit::AutoBulletList</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="TextFilter">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>10</y>
-      <width>141</width>
-      <height>36</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Filtre l'affichage dans la liste</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="TableWRpm">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>20</x>
       <y>140</y>
-      <width>1021</width>
+      <width>1351</width>
       <height>631</height>
      </rect>
     </property>
@@ -450,18 +271,167 @@
      </property>
     </column>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>20</y>
-      <width>61</width>
-      <height>24</height>
+      <x>20</x>
+      <y>100</y>
+      <width>607</width>
+      <height>35</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Filtre</string>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QComboBox" name="CmbxRpmList">
+       <property name="toolTip">
+        <string>Liste des rpms locaux</string>
+       </property>
+       <property name="maxVisibleItems">
+        <number>50</number>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="CmbxRpmVers">
+       <property name="toolTip">
+        <string>Version des rpms locaux</string>
+       </property>
+       <property name="maxVisibleItems">
+        <number>50</number>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Filtre</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="TextFilter">
+       <property name="toolTip">
+        <string>Filtre l'affichage dans la liste</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QPushButton" name="BtnClearTxt">
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="ButtonText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>170</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="ButtonText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>170</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="ButtonText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>146</red>
+             <green>148</green>
+             <blue>149</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Vide la liste</string>
+       </property>
+       <property name="text">
+        <string>X</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>10</y>
+      <width>439</width>
+      <height>75</height>
+     </rect>
     </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0" rowspan="2">
+      <widget class="QPushButton" name="BtnConect">
+       <property name="toolTip">
+        <string>Se connecter au serveur MLO et faire un montage SFTP</string>
+       </property>
+       <property name="text">
+        <string>Connection</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../../../../../usr/share/icons/umlo.png</normaloff>../../../../../usr/share/icons/umlo.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="BtnDel">
+       <property name="toolTip">
+        <string>Suprime toutes les versions du rpm local sur le serveur</string>
+       </property>
+       <property name="text">
+        <string>Suprimer</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" rowspan="2">
+      <widget class="QPushButton" name="BtnDeConect">
+       <property name="text">
+        <string>Deconnection</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../../../../../usr/share/icons/umlo.png</normaloff>../../../../../usr/share/icons/umlo.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="BtnSend">
+       <property name="toolTip">
+        <string>Envoie tout les rpms sur le serveur</string>
+       </property>
+       <property name="text">
+        <string>Envoi</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -469,7 +439,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1227</width>
+     <width>1410</width>
      <height>29</height>
     </rect>
    </property>
