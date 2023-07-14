@@ -72,7 +72,7 @@ chmod -R ug+rw %{_srcrpmdir}
 %{_datadir}/umlo/translations/umlo_fr_FR.qm
 
 %changelog
-* Sat Jul 14 2023 surfzoid@gmail.com
+* Fri Jul 14 2023 surfzoid@gmail.com
 + manage multiple build directory.
 
 * Wed Jun 14 2023 surfzoid@gmail.com
