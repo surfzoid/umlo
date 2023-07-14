@@ -191,7 +191,7 @@ void Umlo::setProgress(QFileInfo FsName)
 
     switch(PrCase) {
     case 0:
-        Populate(FsName.fileName(), "SFTP", "Aucun");
+        Populate(FsName.fileName(), "SFTP", "Aucun","");
         if (future.isFinished())
         {
             ui->textEdit->append("Fin de la liste");
@@ -200,7 +200,7 @@ void Umlo::setProgress(QFileInfo FsName)
 
     case 1:
         QFile::remove(FsName.path() + "/" + FsName.fileName() );
-        Populate(FsName.fileName(), "SFTP", "suprimé");
+        Populate(FsName.fileName(), "SFTP", "suprimé","");
         break;
     default:
         PrCase=-1;
@@ -295,7 +295,7 @@ void Umlo::FindLocalRpm(QStringList dirlist)
                     ui->textEdit->setTextColor(Qt::black);
                 }
 
-                Populate(fi.fileName(), "Local", "Aucun");
+                Populate(fi.fileName(), "Local", "Aucun",Path);
                 if (ui->CmbxRpmList->findText(RName) == -1)
                 {
                     ui->CmbxRpmList->addItem(RName);
@@ -339,7 +339,7 @@ void Umlo::on_actionRafraichir_triggered()
     //    ui->textEdit->clear();
     clearitems();
 
-        future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
+    future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
     //    FindLocalRpm(MloMount);
 }
 
@@ -411,7 +411,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
         if (progress.wasCanceled())
         {
 
-            Populate(Fs.fileName(), "SFTP", "Annuler");
+            Populate(Fs.fileName(), "SFTP", "Annuler","");
             FailCp = true;
             break;
         }
@@ -419,7 +419,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
     toFile.setPermissions(fromFile.permissions());
     progress.setValue(nCopySize);
     if (!FailCp)
-        Populate(Fs.fileName(), "SFTP", "copié");
+        Populate(Fs.fileName(), "SFTP", "copié","");
 
     fromFile.close();
     toFile.close();
@@ -502,7 +502,7 @@ void Umlo::clearitems()
     return;
 }
 
-void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
+void Umlo::Populate(QString fileName, QString Whereis, QString Statu, QString Path)
 {
     ui->TableWRpm->horizontalHeader()->sortIndicatorOrder();
 
@@ -516,6 +516,8 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu)
 
     QTableWidgetItem *RpmItem = new QTableWidgetItem(RpmName);
     RpmItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);
+    if (Path != "")
+        RpmItem->setToolTip(Path);
 
     QTableWidgetItem *VersItem = new QTableWidgetItem(MloVers);
     VersItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable);

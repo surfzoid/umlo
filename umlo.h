@@ -81,7 +81,7 @@ private:
     void FindLocalRpm(QStringList dir);
     void UploadRpm(QFileInfo Fs);
     void clearitems();
-    void Populate(QString fileName, QString Whereis, QString Statu);
+    void Populate(QString fileName, QString Whereis, QString Statu, QString Path);
     QFutureWatcher<void>  *futureWatcher;
     bool LocalRpmEnd = false;
 
