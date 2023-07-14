@@ -84,12 +84,16 @@ private:
     void Populate(QString fileName, QString Whereis, QString Statu, QString Path);
     QFutureWatcher<void>  *futureWatcher;
     bool LocalRpmEnd = false;
+    int HeightOffset = 0;
+    int WidthtOffset = 0;
+
 
 signals:
     void computationProgress( QFileInfo FsName);
 
 protected:
     //void closeEvent(QCloseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 
 };

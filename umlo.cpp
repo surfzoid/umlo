@@ -79,6 +79,9 @@ Umlo::Umlo(QWidget *parent)
     QGridLayout * layout = new QGridLayout(ui->TableWRpm);
     layout->addWidget(sizeGrip, 0,0,1,1,Qt::AlignBottom | Qt::AlignRight);
 
+
+    HeightOffset = height() - ui->TableWRpm->height();
+    WidthtOffset = width() - ui->TableWRpm->width();
 }
 
 Umlo::~Umlo()
@@ -574,4 +577,9 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu, QString Pa
 void Umlo::on_actionQT_infos_triggered()
 {
     QApplication::aboutQt();
+}
+
+void Umlo::resizeEvent(QResizeEvent *event)
+{
+    ui->TableWRpm->resize(width() - WidthtOffset, height() - HeightOffset);
 }
