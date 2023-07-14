@@ -6,115 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1138</width>
-    <height>384</height>
+    <width>1008</width>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Parametres</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="formLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>30</y>
-      <width>811</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Nom d'utilisateur</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="UserEd">
-       <property name="toolTip">
-        <string>Enter the user name</string>
-       </property>
-       <property name="text">
-        <string>surfzoid</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Passphrase</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="PassEd">
-       <property name="toolTip">
-        <string>Enter the user password</string>
-       </property>
-       <property name="text">
-        <string>pass</string>
-       </property>
-       <property name="echoMode">
-        <enum>QLineEdit::PasswordEchoOnEdit</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Prefixe utilisateur</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="PrefixUserEd">
-       <property name="toolTip">
-        <string>Enter the user name</string>
-       </property>
-       <property name="text">
-        <string>surf</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Chemins rpmbuild</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Montage racine ssh</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="RootEd">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="toolTip">
-        <string>Enter the user name</string>
-       </property>
-       <property name="text">
-        <string>surfzoid</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QComboBox" name="comboBoxRpmbuildDir"/>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>250</y>
+      <x>350</x>
+      <y>270</y>
       <width>180</width>
       <height>69</height>
      </rect>
@@ -142,17 +46,81 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>150</y>
-      <width>169</width>
-      <height>75</height>
+      <x>10</x>
+      <y>20</y>
+      <width>971</width>
+      <height>231</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Nom d'utilisateur</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="UserEd">
+       <property name="toolTip">
+        <string>Enter the user name</string>
+       </property>
+       <property name="text">
+        <string>surfzoid</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Passphrase</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="PassEd">
+       <property name="toolTip">
+        <string>Enter the user password</string>
+       </property>
+       <property name="text">
+        <string>pass</string>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::PasswordEchoOnEdit</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Prefixe utilisateur</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="PrefixUserEd">
+       <property name="toolTip">
+        <string>Enter the user name</string>
+       </property>
+       <property name="text">
+        <string>surf</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Chemins rpmbuild</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="comboBoxRpmbuildDir"/>
+     </item>
+     <item row="3" column="2">
       <widget class="QPushButton" name="BtnRpmbuilDirChoice">
        <property name="toolTip">
         <string>Ajouter un rpmbuild dir qui contient SRPMS</string>
@@ -162,7 +130,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item row="3" column="3">
       <widget class="QPushButton" name="BtnRpmbuilDirDel">
        <property name="palette">
         <palette>
@@ -269,7 +237,27 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Montage racine ssh</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="RootEd">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Enter the user name</string>
+       </property>
+       <property name="text">
+        <string>surfzoid</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
       <widget class="QPushButton" name="BtnSshDirChoice">
        <property name="text">
         <string>...</string>
@@ -284,7 +272,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1138</width>
+     <width>1008</width>
      <height>29</height>
     </rect>
    </property>

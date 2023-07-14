@@ -35,6 +35,8 @@ Parametres::Parametres(QWidget *parent) :
 void Parametres::showEvent(QShowEvent *event)
 {
 //    ui->BtnSshDirChoice->y() = ui->RootEd->y();
+//    ui->gridLayout->setDefaultPositioning(ui->formLayoutWidget->y(),Qt::Orientation::Horizontal);
+//    ui->gridLayout->setAlignment(ui->formLayout->alignment());
 }
 
 Parametres::~Parametres()
