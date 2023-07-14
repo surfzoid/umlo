@@ -32,6 +32,11 @@ Parametres::Parametres(QWidget *parent) :
     ui->RootEd->setText(Umlo::MloMount);
 }
 
+void Parametres::showEvent(QShowEvent *event)
+{
+//    ui->BtnSshDirChoice->y() = ui->RootEd->y();
+}
+
 Parametres::~Parametres()
 {
     delete ui;
@@ -86,7 +91,7 @@ void Parametres::on_BtnSshDirChoice_released()
     }
 }
 
-void Parametres::on_BtnSshDirDel_released()
+void Parametres::on_BtnRpmbuilDirDel_released()
 {
     ui->comboBoxRpmbuildDir->removeItem(ui->comboBoxRpmbuildDir->currentIndex());
 }

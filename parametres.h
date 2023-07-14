@@ -25,12 +25,15 @@ private slots:
 
     void on_BtnSshDirChoice_released();
 
-    void on_BtnSshDirDel_released();
+    void on_BtnRpmbuilDirDel_released();
 
 private:
     Ui::Parametres *ui;
     QSettings settings;
     QString CmBxToStr();
+
+protected:
+    void showEvent(QShowEvent *event) override;
 };
 
 #endif // PARAMETRES_H
