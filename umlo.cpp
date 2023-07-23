@@ -122,7 +122,7 @@ void Umlo::Init()
     }else{
         ui->StatuLbl->setText("Connection ok");
 
-        ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur...");
+        ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur, veuillez patienter jusqu'a la fin...");
 
         RpmName = "";
         PrCase=0;
