@@ -9,6 +9,8 @@ About::About(QWidget *parent) :
 {
     ui->setupUi(this);
     QString Vers = APP_VERSION;
+    Vers += "-";
+    Vers += APP_RELEASE;
     ui->LblVers->setText("Version " + Vers);
 }
 

@@ -13,6 +13,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Version
+        run: echo "::set-output name=version::$(head -n 1 ./umlo.pro| cut -d ' ' -f 3)"
+        id: version
+
+      - name: Rel
+        run: echo "::set-output name=rel::$(grep "%global Rel" ./umlo.spec | cut -d ' ' -f 3)"
+        id: rel
+
+      - name: Update Version and Release
+        run: |
+            sed -i 's/\(VERSION = \).*/\1         ${{ steps.version.outputs.version }}/' umlo.pro
+            sed -i 's/\(RELEASE = \).*/\1         ${{ steps.Rel.outputs.rel }}/' umlo.pro
 
       - name: Need qmake and QT
         run: | 
@@ -32,10 +45,6 @@ jobs:
 
       - name: make install
         run: sudo make install
-      
-      - name: Version
-        run: echo "::set-output name=version::$(head -n 1 ./umlo.pro| cut -d ' ' -f 3)"
-        id: version
 
       - name: Archive of bin's
         run: | 

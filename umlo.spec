@@ -14,7 +14,7 @@ Release:        %{Rel}.surf.mlo
 License:        GPLv3
 Group:          Networking/File transfer
 URL:            https://github.com/surfzoid/umlo
-Source0:        https://github.com/surfzoid/umlo/archive/%{version}/umlo-%{version}.tar.gz
+Source0:        https://github.com/surfzoid/umlo/archive/%{version}-%{Rel}/umlo-%{version}-%{Rel}.tar.gz
 # List of additional build dependencies
 %if 0%{?mageia}
 BuildRequires:  qtbase5-common-devel
@@ -35,7 +35,10 @@ A client for rpm builders to manage MLO Repository.
 It increase productivity and reduce stress by freeing mind of where to put rpm at good place.
 
 %prep
-%autosetup -n umlo-%{version}
+%autosetup -n umlo-%{version}-%{Rel}
+sed -i 's/\(VERSION = \).*/\1         %{version}/' %{_builddir}/%{name}-%{version}-%{Rel}/QtVsPlayer.pro
+sed -i 's/\(RELEASE = \).*/\1         %{Rel}/' %{_builddir}/%{name}-%{version}-%{Rel}/QtVsPlayer.pro
+ 
  
 %build
 %if 0%{?suse_version}

@@ -549,7 +549,7 @@ void Umlo::Populate(QString fileName, QString Whereis, QString Statu, QString Pa
     {
         StatusItem->setForeground(Qt::red);
     }else{
-        StatusItem->setForeground(Qt::green);
+        StatusItem->setForeground(Qt::darkGreen);
     }
 
     int row = ui->TableWRpm->rowCount();

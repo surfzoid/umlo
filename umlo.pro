@@ -1,5 +1,8 @@
 VERSION = 1.0.8
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+RELEASE = 1
+DEFINES += APP_RELEASE=\\\"$$RELEASE\\\"
+
 QT       += core gui concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
