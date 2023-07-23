@@ -2,7 +2,7 @@ Name:           umlo
 Summary:        umlo for French MLO Repository
 Version:        1.0.8
 
-%global Rel 9
+%global Rel 10
 %if 0%{?mageia}
 Release:        %mkrel %{Rel}
 %elif 0%{?fedora} > 36 || 0%{?rhel} > 6
