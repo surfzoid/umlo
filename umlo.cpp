@@ -69,8 +69,8 @@ Umlo::Umlo(QWidget *parent)
 
     future = QtConcurrent::run(this, &Umlo::FindLocalRpm, RpmbuildPath);
 
-    ui->StatuLbl->setText("Listage des rpms Locaux");
-    ui->textEdit->append("Liste des RPMS depuis SRPMS");
+    ui->StatuLbl->setText("Listage des rpms Locaux, veuillez patienter jusqu'a la fin");
+    ui->textEdit->append("Liste des RPMS depuis SRPMS, veuillez patienter jusqu'a la fin");
 
     ui->TableWRpm->setWindowFlags(Qt::SubWindow);
 
@@ -147,7 +147,7 @@ void Umlo::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
         }else{
             ui->StatuLbl->setText("Connection ok");
 
-            ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur...");
+            ui->textEdit->append("Recuperation de la liste des RPMS depuis le serveur, veuillez patienter jusqu'a la fin...");
 
             RpmName = "";
             PrCase=0;
@@ -227,7 +227,7 @@ void Umlo::on_BtnDel_released()
 
     RpmName = ui->CmbxRpmList->currentText();
     future = QtConcurrent::run(this, &Umlo::scanDir, MountDir->path());
-    ui->textEdit->append("Suppression des RPMS " + ui->CmbxRpmList->currentText() + " sur le serveur");
+    ui->textEdit->append("Suppression des RPMS " + ui->CmbxRpmList->currentText() + " sur le serveur, veuillez patienter jusqu'a la fin");
 
 }
 
