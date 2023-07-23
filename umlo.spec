@@ -36,8 +36,8 @@ It increase productivity and reduce stress by freeing mind of where to put rpm a
 
 %prep
 %autosetup -n umlo-%{version}-%{Rel}
-sed -i 's/\(VERSION = \).*/\1         %{version}/' %{_builddir}/%{name}-%{version}-%{Rel}/QtVsPlayer.pro
-sed -i 's/\(RELEASE = \).*/\1         %{Rel}/' %{_builddir}/%{name}-%{version}-%{Rel}/QtVsPlayer.pro
+sed -i 's/\(VERSION = \).*/\1         %{version}/' %{_builddir}/%{name}-%{version}-%{Rel}/umlo.pro
+sed -i 's/\(RELEASE = \).*/\1         %{Rel}/' %{_builddir}/%{name}-%{version}-%{Rel}/umlo.pro
  
  
 %build
