@@ -48,7 +48,7 @@ jobs:
 
       - name: Archive of bin's
         run: | 
-            tar -czvf umlo-bin-${{ steps.version.outputs.version }}.tar.gz /usr/bin/umlo
+            tar -czvf umlo-bin-${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}.tar.gz /usr/bin/umlo
             ls -lah
 
       - name: Create Github Release
@@ -59,8 +59,8 @@ jobs:
           replacesArtifacts: true
           token: ${{ github.TOKEN }}
           allowUpdates: true
-          name: ${{ steps.version.outputs.version }}
-          tag: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}
+          tag: ${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}
           body: "Automatic build from GitHub action"
 
   windoze:
@@ -95,6 +95,15 @@ jobs:
 
       - name: Check Version
         run: echo ${{ steps.version.outputs.version }}
+
+      - name: Rel
+        run: echo "::set-output name=rel::$(grep "%global Rel" ./umlo.spec | cut -d ' ' -f 3)"
+        id: rel
+
+      - name: Update Version and Release
+        run: |
+            sed -i 's/\(VERSION = \).*/\1         ${{ steps.version.outputs.version }}/' umlo.pro
+            sed -i 's/\(RELEASE = \).*/\1         ${{ steps.Rel.outputs.rel }}/' umlo.pro
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.0.0
@@ -131,17 +140,17 @@ jobs:
             cp qt/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll application/
             cp qt/Qt/5.15.2/mingw81_64/bin/libstdc++-6.dll application/
             cp qt/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll application/
-            Compress-Archive -Path application\* -DestinationPath umlo-win64-${{ steps.version.outputs.version }}.zip
+            Compress-Archive -Path application\* -DestinationPath umlo-win64-${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}.zip
 
       - name: Create Github Release
         uses: ncipollo/release-action@v1.11.1
         id: create_release
         with:
-          artifacts: "umlo-win64-${{ steps.version.outputs.version }}.zip"
+          artifacts: "umlo-win64-${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}.zip"
           replacesArtifacts: true
           token: ${{ github.TOKEN }}
           allowUpdates: true
-          name: ${{ steps.version.outputs.version }}
-          tag: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}
+          tag: ${{ steps.version.outputs.version }}-${{ steps.Rel.outputs.rel }}
           body: "Automatic build from GitHub action, see umlo.spec for change log"
 
