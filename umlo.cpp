@@ -394,7 +394,7 @@ void Umlo::UploadRpm(QFileInfo Fs)
         BuffCpy=1024;
 
     QProgressDialog progress("Copie " + Fs.fileName() + " " + QString::number(SizeMB ,10) + " MB", "Annuler la copie", 0,nCopySize, this);
-    progress.setWindowModality(Qt::WindowModal);
+    progress.setWindowModality(Qt::ApplicationModal);
 
     fromFile.open(QIODevice::ReadOnly);
     toFile.open(QIODevice::WriteOnly);
